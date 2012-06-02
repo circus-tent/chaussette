@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 install_requires=['gunicorn', 'circus']
 
 
-setup(name='chausette',
+setup(name='chaussette',
       version='0.1',
       packages=find_packages(),
       description=("A WSGI Server extension for Circus -- prototype do not use"),

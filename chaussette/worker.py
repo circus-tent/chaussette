@@ -40,10 +40,9 @@ def serve():
         resp.force_close()
         resp.write('Hello World, for pid %d' % os.getpid())
         resp.close()
-
         close(client)
 
-        # select
+        # wait for the next one
         try:
             ret = select.select([sock], [], PIPE, timeout)
             if ret[0]:
@@ -51,11 +50,6 @@ def serve():
         except select.error, e:
             if e[0] == errno.EINTR:
                 continue
-            if e[0] == errno.EBADF:
-                if self.nr < 0:
-                    continue
-                else:
-                    return
             raise
 
 
