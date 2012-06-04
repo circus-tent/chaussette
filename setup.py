@@ -1,7 +1,7 @@
 import sys
 from setuptools import setup, find_packages
 
-install_requires=['gunicorn', 'circus']
+install_requires=[]
 
 
 setup(name='chaussette',
@@ -18,4 +18,8 @@ setup(name='chaussette',
         "Development Status :: 1 - Planning"],
       install_requires=install_requires,
       test_requires=['nose'],
-      test_suite = 'nose.collector')
+      test_suite = 'nose.collector',
+      entry_points="""
+      [console_scripts]
+      chaussette = chaussette.server:main
+      """)

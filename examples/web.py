@@ -19,18 +19,17 @@ sock.listen(1)
 print 'Listening to %s:%d' % (HOST, PORT)
 
 # passing its fd in the environ
-os.environ['SOCKET'] = str(sock.fileno())
+#os.environ['CHAUSSETTE_FD'] = str(sock.fileno())
 
 python = sys.executable
 here = os.path.dirname(__file__)
 
-
 # creating 2 web workers now these will be managed by circus
 # since they will be circusd subprocess they can share the socket
 #
-p = Popen(python + " worker.py", shell=True, stdout=PIPE, stderr=PIPE,
+p = Popen(python + " server.py --fd %d" % sock.fileno(), shell=True, stdout=PIPE, stderr=PIPE,
           cwd=here)
-p2 = Popen(python + " worker.py", shell=True, stdout=PIPE, stderr=PIPE,
+p2 = Popen(python + " server.py --fd %d" % sock.fileno(), shell=True, stdout=PIPE, stderr=PIPE,
           cwd=here)
 
 
