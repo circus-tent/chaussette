@@ -3,24 +3,16 @@ Chaussette
 
 Chaussette is a prototype WSGI server for Circus.
 
-It comes in two parts:
+It provides a web server your can launch against a WSGI application,
+using the **chaussette** console script::
 
-A - a module that creates a socket and publish the FD in the environ
-    and run some workers as child processes
-B - a module that runs a wsgi worker against the socket, by getting its FD
+    $ chaussette myapp
 
-In Circus the idea would be to "publish sockets" like A, then
-have a watcher that manages n workers from B.
+It has a specific mode to run against an existing open socket.
+This can only be used when chaussette is forked from another process.
 
-For now the code just returns an "Hello World" and uses Gunicorn's http
-package to read the requests and send the response.
+The typical use case is to run chaussette workers in Circus,
+which takes care of the sockets and spawn chaussette workers.
 
-If the experiment goes well, A could be integrated in Circus ala einhorn:
-people will just configure "sockets" to be opened by Circus.
-
-Then B could be a standalone wsgi server that just (optionaly) works
-with a socket initialized from a fd passed by Circus' env.
-
-Maybe http://pypi.python.org/pypi/bjoern could be adapted and used
-for that...
-
+Planned: implement a backend against a performant web server
+like meinheild or bjoern.
