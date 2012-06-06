@@ -17,9 +17,9 @@ class ChaussetteServer(WSGIServer):
                  bind_and_activate=True):
         BaseServer.__init__(self, server_address, RequestHandlerClass)
         host, port = self.server_address = server_address
-        if host.startswith('fd:'):
+        if host.startswith('fd://'):
             self.byfd = True
-            self.fd = int(host.split(':')[1])
+            self.fd = int(host.split('://')[1])
             self.socket = socket.fromfd(self.fd, self.address_family,
                                         self.socket_type)
         else:
@@ -47,6 +47,7 @@ class ChaussetteServer(WSGIServer):
             self.server_name = socket.getfqdn(host)
             self.server_port = port
         else:
+            # XXX see how to get the fqnd with the fd
             self.server_name = self.server_address[0]
             self.server_port = self.server_address[1]
 
@@ -55,18 +56,15 @@ class ChaussetteServer(WSGIServer):
 
 class ChaussetteHandler(WSGIRequestHandler):
 
-    def handle(self):
-        return WSGIRequestHandler.handle(self)
-
     def address_string(self):
-        return 'FD'
+        return 'FD'     # XXX see how to do this
 
 
 def make_server(app, host=None, port=None, fd=None,
                 server_class=ChaussetteServer,
                 handler_class=ChaussetteHandler):
     print('Application is %r' % app)
-    if host.startswith('fd:'):
+    if host.startswith('fd://'):
         print('Serving on %s' % host)
     else:
         print('Serving on %s:%s' % (host, port))
@@ -89,7 +87,7 @@ def main():
     app = resolve_name(args.application)
 
     if args.fd != -1:
-        host = 'fd:%d' % args.fd
+        host = 'fd://%d' % args.fd
     else:
         host = args.host
 
