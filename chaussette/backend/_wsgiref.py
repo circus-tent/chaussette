@@ -9,12 +9,21 @@ from SocketServer import BaseServer
 
 
 
+class ChaussetteHandler(WSGIRequestHandler):
+
+    def address_string(self):
+        return 'FD'     # XXX see how to do this
+
+
+
 class ChaussetteServer(WSGIServer):
     """WSGI Server that can reuse an existing open socket.
     """
-    def __init__(self, server_address, RequestHandlerClass,
-                 bind_and_activate=True):
-        BaseServer.__init__(self, server_address, RequestHandlerClass)
+    handler_class = ChaussetteHandler
+
+    def __init__(self, server_address, app, bind_and_activate=True):
+        BaseServer.__init__(self, server_address, self.handler_class)
+        self.set_app(app)
         host, port = self.server_address = server_address
         if host.startswith('fd://'):
             self.byfd = True
@@ -52,10 +61,5 @@ class ChaussetteServer(WSGIServer):
 
         self.setup_environ()
 
-
-class ChaussetteHandler(WSGIRequestHandler):
-
-    def address_string(self):
-        return 'FD'     # XXX see how to do this
 
 

@@ -14,9 +14,9 @@ def make_server(app, host=None, port=None, backend='wsgiref'):
     else:
         print('Serving on %s:%s' % (host, port))
 
-    server_class, handler_class = get(backend)
-    server = server_class((host, port), handler_class)
-    server.set_app(app)
+    server_class = get(backend)
+    print('Using %r as a backend' % server_class)
+    server = server_class((host, port), app)
     return server
 
 
