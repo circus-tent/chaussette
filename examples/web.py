@@ -3,36 +3,28 @@ import os
 from subprocess import Popen, PIPE
 import sys
 
-# this is a "Circus Socket"
-# a socket managed by circus in circusd
 HOST = 'localhost'
-PORT = 8081
-res = socket.getaddrinfo(HOST, PORT, socket.AF_INET6, socket.SOCK_STREAM)
-family, socktype, proto, canonname, sockaddr = res[1]
+PORT = 8085
 
 # creating a socket
-sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
-sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-sock.bind(sockaddr)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.bind((HOST, PORT))
 sock.listen(1)
 
 print 'Listening to %s:%d' % (HOST, PORT)
 
-# passing its fd in the environ
-#os.environ['CHAUSSETTE_FD'] = str(sock.fileno())
+here = '/Users/tarek/Dev/github.com/chaussette'
 
-python = sys.executable
-here = os.path.dirname(__file__)
-
-# creating 2 web workers now these will be managed by circus
-# since they will be circusd subprocess they can share the socket
-#
-p = Popen(python + " server.py --fd %d" % sock.fileno(), shell=True, stdout=PIPE, stderr=PIPE,
-          cwd=here)
-p2 = Popen(python + " server.py --fd %d" % sock.fileno(), shell=True, stdout=PIPE, stderr=PIPE,
-          cwd=here)
+cmd = ('/Users/tarek/Dev/github.com/chaussette/uwsgi/uwsgi --http-socket fd://%d '
+       '-w chaussette.util:hello_app --logto /tmp/ok' % (sock.fileno()))
 
 
-# here will just wait --
-print p.stderr.read()
-print p2.stderr.read()
+p = Popen(cmd, cwd=here, shell=True)
+p2 = Popen(cmd, cwd=here, shell=True)
+
+try:
+    p.wait()
+    p2.wait()
+except KeyboardInterrupt:
+    p.terminate()
+    p2.terminate()
