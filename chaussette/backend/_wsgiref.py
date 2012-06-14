@@ -1,21 +1,14 @@
-import sys
-import os
 import socket
-import argparse
-
-
 from wsgiref.simple_server import WSGIServer, WSGIRequestHandler
 from SocketServer import BaseServer
 
 from chaussette.util import create_socket
 
 
-
 class ChaussetteHandler(WSGIRequestHandler):
 
     def address_string(self):
         return 'FD'     # XXX see how to do this
-
 
 
 class ChaussetteServer(WSGIServer):
