@@ -37,7 +37,6 @@ class ChaussetteServer(WSGIServer):
         if self.allow_reuse_address:
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         if not self.byfd:
-            self.socket.bind(self.server_address)
             self.server_address = self.socket.getsockname()
             host, port = self.socket.getsockname()[:2]
             self.server_name = socket.getfqdn(host)

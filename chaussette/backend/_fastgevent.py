@@ -1,11 +1,8 @@
 import socket
 from gevent.wsgi import WSGIServer
 from gevent import monkey
+
 from chaussette.util import create_socket
-
-
-monkey.noisy = False
-monkey.patch_all()
 
 
 class Server(WSGIServer):
@@ -16,6 +13,8 @@ class Server(WSGIServer):
     def __init__(self, listener, application=None, backlog=None,
                  spawn='default', log='default', handler_class=None,
                  environ=None, **ssl_args):
+        monkey.noisy = False
+        monkey.patch_all()
         host, port = listener
         self.socket = create_socket(host, port, self.address_family,
                                     self.socket_type)

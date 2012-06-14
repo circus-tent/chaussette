@@ -2,7 +2,7 @@ import sys
 import argparse
 
 from chaussette.util import resolve_name
-from chaussette.backend import get
+from chaussette.backend import get, backends
 
 
 def make_server(app, host=None, port=None, backend='wsgiref'):
@@ -24,7 +24,8 @@ def main():
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--host', default='localhost')
     group.add_argument('--fd', type=int, default=-1)
-    parser.add_argument('--backend', type=str, default='wsgiref')
+    parser.add_argument('--backend', type=str, default='wsgiref',
+                        choices=backends())
     parser.add_argument('application', default='chaussette.util.hello_app',
                         nargs='?')
     args = parser.parse_args()

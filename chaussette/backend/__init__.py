@@ -25,3 +25,7 @@ def register(name, server):
 
 def get(name):
     return _backends[name]
+
+
+def backends():
+    return _backends.keys()
