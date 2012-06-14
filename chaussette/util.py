@@ -52,7 +52,7 @@ def hello_app(environ, start_response):
 
 
 def create_socket(host, port, family=socket.AF_INET, type=socket.SOCK_STREAM,
-                  backlog=2048):
+                  backlog=2048, blocking=True):
     if host.startswith('fd://'):
         # just recreate the socket
         fd = int(host.split('://')[1])
@@ -62,5 +62,8 @@ def create_socket(host, port, family=socket.AF_INET, type=socket.SOCK_STREAM,
         sock.bind((host, port))
         sock.listen(backlog)
 
-    sock.setblocking(0)
+    if blocking:
+        sock.setblocking(1)
+    else:
+        sock.setblocking(0)
     return sock
