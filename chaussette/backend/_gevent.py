@@ -1,5 +1,6 @@
 import socket
-from gevent.pywsgi import WSGIServer
+#from gevent.pywsgi import WSGIServer
+from gevent.wsgi import WSGIServer
 from gevent import monkey
 
 monkey.noisy = False
@@ -29,12 +30,13 @@ class Server(WSGIServer):
                                         self.socket_type)
             self.fd = self.socket.fileno()
             self.socket.bind(listener)
-            self.socket.listen(5)
+            self.socket.listen(socket.SOMAXCONN)
 
         self.server_address = self.socket.getsockname()
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.socket.setblocking(1)
+        self.socket.setblocking(0)
 
+        log = None
         super(Server, self).__init__(self.socket, application, backlog, spawn, log,
                                      handler_class, environ, **ssl_args)
 
