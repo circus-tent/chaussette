@@ -1,4 +1,5 @@
 import sys
+import socket
 
 
 def resolve_name(name):
@@ -48,3 +49,18 @@ def hello_app(environ, start_response):
     headers = [('Content-type', 'text/plain')]
     start_response(status, headers)
     return ['hello world']
+
+
+def create_socket(host, port, family=socket.AF_INET, type=socket.SOCK_STREAM,
+                  backlog=2048):
+    if host.startswith('fd://'):
+        # just recreate the socket
+        fd = int(host.split('://')[1])
+        sock = socket.fromfd(fd, family, type)
+    else:
+        sock = socket.socket(family, type)
+        sock.bind((host, port))
+        sock.listen(backlog)
+
+    sock.setblocking(0)
+    return sock

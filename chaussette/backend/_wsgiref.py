@@ -7,6 +7,8 @@ import argparse
 from wsgiref.simple_server import WSGIServer, WSGIRequestHandler
 from SocketServer import BaseServer
 
+from chaussette.util import create_socket
+
 
 
 class ChaussetteHandler(WSGIRequestHandler):
@@ -24,18 +26,11 @@ class ChaussetteServer(WSGIServer):
     def __init__(self, server_address, app, bind_and_activate=True):
         BaseServer.__init__(self, server_address, self.handler_class)
         self.set_app(app)
-        host, port = self.server_address = server_address
-        if host.startswith('fd://'):
-            self.byfd = True
-            self.fd = int(host.split('://')[1])
-            self.socket = socket.fromfd(self.fd, self.address_family,
-                                        self.socket_type)
-        else:
-            self.byfd = False
-            self.socket = socket.socket(self.address_family,
-                                        self.socket_type)
-            self.fd = self.socket.fileno()
 
+        host, port = self.server_address = server_address
+        self.socket = create_socket(host, port, self.address_family,
+                                    self.socket_type)
+        self.byfd = host.startswith('fd://')
         if bind_and_activate:
             self.server_bind()
             self.server_activate()
@@ -60,6 +55,3 @@ class ChaussetteServer(WSGIServer):
             self.server_port = self.server_address[1]
 
         self.setup_environ()
-
-
-

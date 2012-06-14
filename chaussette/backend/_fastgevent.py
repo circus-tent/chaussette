@@ -1,5 +1,5 @@
 import socket
-from gevent.pywsgi import WSGIServer
+from gevent.wsgi import WSGIServer
 from gevent import monkey
 from chaussette.util import create_socket
 
