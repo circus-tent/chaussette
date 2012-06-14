@@ -12,6 +12,13 @@ except ImportError:
     pass
 
 
+try:
+    from chaussette.backend import _meinheld
+    _backends['meinheld'] = _meinheld.Server
+except ImportError:
+    pass
+
+
 def register(name, server):
     _backends[name] = server
 
