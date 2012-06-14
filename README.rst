@@ -14,7 +14,7 @@ This can only be used when Chaussette is forked from another process::
     $ chaussette --fd 12 myapp
 
 Chaussette is a dead-simple runner and does not come with any fancy
-processes or threads managment system.
+processes or threads management system.
 
 The typical use case is to run Chaussette workers in `Circus <http://circus.io>`_,
 which takes care of the sockets and spawn Chaussette workers.
@@ -27,7 +27,7 @@ By default Chaussette uses a pure Python implementation based on **wsgiref**,
 but it also provides more efficient back ends:
 
 - **gevent** -- based on Gevent's *pywsgi* server
-- **fastgevent**: -- based on Gevent's *wsgi* server -- faster but does not
+- **fastgevent** -- based on Gevent's *wsgi* server -- faster but does not
   support streaming.
 - **meinheld** -- based on Meinheld's fast C server
 
