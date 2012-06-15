@@ -102,3 +102,9 @@ Using a pre-fork model, Circus binds sockets and forks Chaussette processes
 that are able to accept connections on those sockets, as child processes.
 
 For more information about this design, read http://blog.ziade.org/2012/06/12/shared-sockets-in-circus.
+
+Useful links
+------------
+
+- Repository : https://github.com/tarekziade/chaussette
+
