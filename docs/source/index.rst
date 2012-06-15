@@ -90,7 +90,7 @@ Rationale and Design
 Most WGSI servers out there provide advanced features to scale your web
 applications, like multi-threading or multi-processing. Depending on the
 project, the *process management* features, like respawning processes that
-die, or adding new ones on the fly, are not always very adavanced.
+die, or adding new ones on the fly, are not always very advanced.
 
 On the other hand, Circus provides very advanced features to manage
 your processes, and is able to manage sockets as well.
