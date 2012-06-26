@@ -3,6 +3,7 @@ import argparse
 
 from chaussette.util import resolve_name
 from chaussette.backend import get, backends
+from chaussette._django import django_app
 
 
 def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048):
@@ -29,9 +30,17 @@ def main():
                         choices=backends())
     parser.add_argument('application', default='chaussette.util.hello_app',
                         nargs='?')
+
+    parser.add_argument('--django-settings', type=str, default=None)
+
     args = parser.parse_args()
 
-    app = resolve_name(args.application)
+    application = args.application
+
+    if application.startswith('django:'):
+        app = django_app(application.split(':')[-1], args.django_settings)
+    else:
+        app = resolve_name(application)
 
     if args.fd != -1:
         host = 'fd://%d' % args.fd

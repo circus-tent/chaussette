@@ -33,6 +33,24 @@ the socket::
     Using <class chaussette.backend._wsgiref.ChaussetteServer at 0x104e58d50> as a backend
 
 
+Running a Django application
+----------------------------
+
+**Chaussette** will let you run a Django project. You just need to use to provide the
+path to the project in the **application**, prefixed with **django:**
+
+You can optionally provide the name of the settings module with **--django-settings**,
+when not provided, **Chaussette** will try to find it in the project directory and
+pass it for you.
+
+Here's an example::
+
+    $ bin/chaussette django:path/to/mysite --backend gevent --django-settings mysite.settings
+    Application is <django.core.handlers.wsgi.WSGIHandler object at 0x10ec3f350>
+    Serving on localhost:8080
+    Using <class 'chaussette.backend._gevent.Server'> as a backend
+
+
 Running in Circus
 -----------------
 
