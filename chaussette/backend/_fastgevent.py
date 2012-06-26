@@ -17,9 +17,9 @@ class Server(WSGIServer):
         monkey.patch_all()
         host, port = listener
         self.socket = create_socket(host, port, self.address_family,
-                                    self.socket_type)
+                                    self.socket_type, backlog=backlog)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server_address = self.socket.getsockname()
         log = None
-        super(Server, self).__init__(self.socket, application, backlog, spawn,
+        super(Server, self).__init__(self.socket, application, None, spawn,
                                      log, handler_class, environ, **ssl_args)

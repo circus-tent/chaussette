@@ -5,7 +5,7 @@ from chaussette.util import resolve_name
 from chaussette.backend import get, backends
 
 
-def make_server(app, host=None, port=None, backend='wsgiref'):
+def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048):
     print('Application is %r' % app)
     if host.startswith('fd://'):
         print('Serving on %s' % host)
@@ -14,7 +14,7 @@ def make_server(app, host=None, port=None, backend='wsgiref'):
 
     server_class = get(backend)
     print('Using %r as a backend' % server_class)
-    server = server_class((host, port), app)
+    server = server_class((host, port), app, backlog=backlog)
     return server
 
 
@@ -24,6 +24,7 @@ def main():
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--host', default='localhost')
     group.add_argument('--fd', type=int, default=-1)
+    group.add_argument('--backlog', type=int, default=2048)
     parser.add_argument('--backend', type=str, default='wsgiref',
                         choices=backends())
     parser.add_argument('application', default='chaussette.util.hello_app',
@@ -37,7 +38,8 @@ def main():
     else:
         host = args.host
 
-    httpd = make_server(app, host=host, port=args.port, backend=args.backend)
+    httpd = make_server(app, host=host, port=args.port, backend=args.backend,
+                        backlog=args.backlog)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

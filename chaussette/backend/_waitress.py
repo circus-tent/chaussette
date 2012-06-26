@@ -7,10 +7,10 @@ class Server(WSGIServer):
     address_family = socket.AF_INET
     socket_type = socket.SOCK_STREAM
 
-    def __init__(self, listener, application=None):
+    def __init__(self, listener, application=None, backlog=2048):
         host, port = listener
         sock = create_socket(host, port, self.address_family,
-                                    self.socket_type)
+                             self.socket_type, backlog=backlog)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         super(Server, self).__init__(application, _sock=sock)
 

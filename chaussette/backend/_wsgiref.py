@@ -16,13 +16,14 @@ class ChaussetteServer(WSGIServer):
     """
     handler_class = ChaussetteHandler
 
-    def __init__(self, server_address, app, bind_and_activate=True):
+    def __init__(self, server_address, app, bind_and_activate=True,
+                 backlog=2048):
         BaseServer.__init__(self, server_address, self.handler_class)
         self.set_app(app)
 
         host, port = self.server_address = server_address
         self.socket = create_socket(host, port, self.address_family,
-                                    self.socket_type)
+                                    self.socket_type, backlog=backlog)
         self.byfd = host.startswith('fd://')
         if bind_and_activate:
             self.server_bind()
