@@ -8,7 +8,7 @@ with open('README.rst') as f:
 
 
 setup(name='chaussette',
-      version='0.1',
+      version='0.2',
       packages=find_packages(),
       description=("A WSGI Server for Circus"),
       long_description=README,
