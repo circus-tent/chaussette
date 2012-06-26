@@ -72,7 +72,6 @@ and is organized around **back ends**.
 By default Chaussette uses a pure Python implementation based on **waitress**,
 but it also provides more efficient back ends:
 
-- **waitress** -- a backend based on stdlib's asyncore
 - **gevent** -- based on Gevent's *pywsgi* server
 - **fastgevent** -- based on Gevent's *wsgi* server -- faster but does not
   support streaming.
@@ -81,6 +80,12 @@ but it also provides more efficient back ends:
 
 You can select your backend by using the **--backend** option and providing
 its name.
+
+For some backends, you need to make sure the corresponding libraries
+are installed:
+
+- **gevent** and **fastgevent**: `pip install gevent`
+- **meinheld** : `pip install meinheld`
 
 If you want to add your favorite WSGI Server as a backend to Chaussette,
 send me an e-mail !

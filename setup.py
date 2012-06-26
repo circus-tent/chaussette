@@ -1,13 +1,19 @@
 import sys
+import os
 from setuptools import setup, find_packages
 
+
 install_requires = ['waitress']
+
+with open('README.rst') as f:
+    README = f.read()
 
 
 setup(name='chaussette',
       version='0.1',
       packages=find_packages(),
-      description=("A WSGI Server extension for Circus -- prototype do not use"),
+      description=("A WSGI Server for Circus"),
+      long_description=README,
       author="Tarek Ziade",
       author_email="tarek@ziade.org",
       include_package_data=True,
