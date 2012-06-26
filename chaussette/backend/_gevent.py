@@ -4,7 +4,6 @@ from gevent import monkey
 from chaussette.util import create_socket
 
 
-
 class Server(WSGIServer):
 
     address_family = socket.AF_INET

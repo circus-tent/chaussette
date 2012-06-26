@@ -19,6 +19,13 @@ except ImportError:
     pass
 
 
+try:
+    from chaussette.backend import _waitress
+    _backends['waitress'] = _waitress.Server
+except ImportError:
+    pass
+
+
 def register(name, server):
     _backends[name] = server
 
