@@ -1,5 +1,8 @@
+import os
+import time
 import sys
 import socket
+import tempfile
 
 
 def resolve_name(name):
@@ -49,6 +52,27 @@ def hello_app(environ, start_response):
     headers = [('Content-type', 'text/plain')]
     start_response(status, headers)
     return ['hello world']
+
+
+def bench_app(environ, start_response):
+    start = time.time()
+    status = '200 OK'
+    headers = [('Content-type', 'text/plain')]
+    start_response(status, headers)
+
+    # math
+    for i in range(10000):
+        10 * 1000 * 1000
+
+    time.sleep(.1)
+
+    # I/O
+    fd, path = tempfile.mkstemp()
+    for i in range(10000):
+        os.write(fd, str(i))
+    os.close(fd)
+    os.remove(path)
+    return ['%.4f' % (time.time() - start)]
 
 
 def create_socket(host, port, family=socket.AF_INET, type=socket.SOCK_STREAM,
