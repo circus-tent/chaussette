@@ -69,7 +69,7 @@ Backends
 Chaussette is just a bit of glue code on the top of existing WSGI servers,
 and is organized around **back ends**.
 
-By default Chaussette uses a pure Python implementation based on **wsgiref**,
+By default Chaussette uses a pure Python implementation based on **waitress**,
 but it also provides more efficient back ends:
 
 - **waitress** -- a backend based on stdlib's asyncore
@@ -77,6 +77,7 @@ but it also provides more efficient back ends:
 - **fastgevent** -- based on Gevent's *wsgi* server -- faster but does not
   support streaming.
 - **meinheld** -- based on Meinheld's fast C server
+- **wsgiref** -- based on stdlib's wsgiref package -- not for production use.
 
 You can select your backend by using the **--backend** option and providing
 its name.

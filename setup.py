@@ -1,7 +1,7 @@
 import sys
 from setuptools import setup, find_packages
 
-install_requires=[]
+install_requires = ['waitress']
 
 
 setup(name='chaussette',
