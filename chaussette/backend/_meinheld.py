@@ -1,10 +1,10 @@
 from meinheld import server
-from meinheld import patch
-patch.patch_all()
 
 
 class Server(object):
     def __init__(self, listener, application=None, backlog=2048):
+        from meinheld import patch
+        patch.patch_all()
         server.set_backlog(backlog)
         host, port = listener
         if host.startswith('fd://'):

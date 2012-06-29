@@ -1,6 +1,5 @@
 import socket
 from waitress.server import WSGIServer
-from chaussette.util import create_socket
 
 
 class Server(WSGIServer):
@@ -9,13 +8,22 @@ class Server(WSGIServer):
 
     def __init__(self, listener, application=None, backlog=2048):
         host, port = listener
-        sock = create_socket(host, port, self.address_family,
-                             self.socket_type, backlog=backlog)
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        super(Server, self).__init__(application, _sock=sock)
+        if host.startswith('fd://'):
+            self._fd = int(host.split('://')[1])
+        else:
+            self._fd = None
 
-    def bind(self, addr):
-        pass
+        super(Server, self).__init__(application, backlog=backlog, host=host,
+                                     port=port)
+
+    def create_socket(self, family, type):
+        self.family_and_type = family, type
+        if self._fd is None:
+            sock = socket.socket(family, type)
+        else:
+            sock = socket.fromfd(self._fd, family, type)
+        sock.setblocking(0)
+        self.set_socket(sock)
 
     def serve_forever(self):
         return self.run()
