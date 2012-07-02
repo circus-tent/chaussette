@@ -25,5 +25,10 @@ class Server(WSGIServer):
         sock.setblocking(0)
         self.set_socket(sock)
 
+    def bind(self, listener):
+        if self._fd is not None:
+            return
+        super(Server, self).bind(listener)
+
     def serve_forever(self):
         return self.run()
