@@ -133,8 +133,8 @@ def bench_app(environ, start_response):
     for i in range(10000):
         10 * 1000 * 1000
 
-    duration = random.randint(25, 50) + 50
-    time.sleep(duration / 1000)
+    duration = float(random.randint(25, 50) + 50)
+    time.sleep(duration / 1000.)
 
     # I/O - sending 100 bytes, getting back an HTML page
     result = []
