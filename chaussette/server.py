@@ -51,7 +51,7 @@ def main():
     if args.pre_hook is not None:
         pre_hook = resolve_name(args.pre_hook)
         print('Running the pre-hook %r' % pre_hook)
-        pre_hook()
+        pre_hook(args)
 
     # post-hook ?
     if args.post_hook is not None:
@@ -69,7 +69,7 @@ def main():
     finally:
         if post_hook is not None:
             print('Running the post-hook %r' % post_hook)
-            post_hook()
+            post_hook(args)
 
 
 if __name__ == '__main__':

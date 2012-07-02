@@ -109,14 +109,21 @@ class _FakeDBThread(threading.Thread):
             os.close(f)
 
 
-def setup_bench():
+def setup_bench(config):
+    # early patch
+    if config.backend in ('gevent', 'fastgevent'):
+        from gevent import monkey
+        monkey.patch_all()
+    elif config.backend == 'meinheld':
+        from meinheld import patch
+        patch.patch_all()
     global _DB
     _DB = _FakeDBThread()
     _DB.start()
     time.sleep(0.2)
 
 
-def teardown_bench():
+def teardown_bench(config):
     if _DB is not None:
         _DB.stop()
 
