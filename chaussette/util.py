@@ -5,6 +5,7 @@ import socket
 import threading
 import select
 import random
+import Queue
 
 
 def resolve_name(name):
@@ -56,7 +57,10 @@ def hello_app(environ, start_response):
     return ['hello world']
 
 
-_DB = _IN = _OUT = None
+_IN = _OUT = None
+_DBS = Queue.Queue()
+
+
 _ITEMS = """\
 <HTML>
   <BODY>
@@ -73,6 +77,7 @@ class _FakeDBThread(threading.Thread):
         self.read1, self.write1 = os.pipe()
         self.read2, self.write2 = os.pipe()
         self.running = False
+        self.daemon = True
 
     def send_to_db(self, data):
         os.write(self.write1, data)
@@ -117,15 +122,20 @@ def setup_bench(config):
     elif config.backend == 'meinheld':
         from meinheld import patch
         patch.patch_all()
-    global _DB
-    _DB = _FakeDBThread()
-    _DB.start()
+
+    # starting 10 threads in the background
+    for i in range(10):
+        th = _FakeDBThread()
+        th.start()
+        _DBS.put(th)
+
     time.sleep(0.2)
 
 
 def teardown_bench(config):
-    if _DB is not None:
-        _DB.stop()
+    while not _DBS.empty():
+        th = _DBS.get()
+        th.stop()
 
 
 _100BYTES = '*' * 100 + '\n'
@@ -145,10 +155,16 @@ def bench_app(environ, start_response):
 
     # I/O - sending 100 bytes, getting back an HTML page
     result = []
-    if _DB is not None:
-        _DB.send_to_db(_100BYTES)
-        for line in _DB.get_from_db():
+
+    # picking a DB
+    db = _DBS.get(timeout=1.0)
+    try:
+        db.send_to_db(_100BYTES)
+        for line in db.get_from_db():
             result.append(line)
+    finally:
+        _DBS.put(db)
+
     return result
 
 
