@@ -67,8 +67,9 @@ def main():
         except KeyboardInterrupt:
             sys.exit(0)
     finally:
-        print('Running the post-hook %r' % post_hook)
-        post_hook()
+        if post_hook is not None:
+            print('Running the post-hook %r' % post_hook)
+            post_hook()
 
 
 if __name__ == '__main__':
