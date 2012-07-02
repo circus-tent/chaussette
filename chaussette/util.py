@@ -2,7 +2,9 @@ import os
 import time
 import sys
 import socket
-import tempfile
+import threading
+import select
+import random
 
 
 def resolve_name(name):
@@ -54,25 +56,93 @@ def hello_app(environ, start_response):
     return ['hello world']
 
 
+_DB = _IN = _OUT = None
+_ITEMS = """\
+<HTML>
+  <BODY>
+    Hello there.
+  </BODY>
+</HTML>""".split('\n')
+
+
+class _FakeDBThread(threading.Thread):
+    """Simulates a DB connection
+    """
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.read1, self.write1 = os.pipe()
+        self.read2, self.write2 = os.pipe()
+        self.running = False
+
+    def send_to_db(self, data):
+        os.write(self.write1, data)
+
+    def get_from_db(self):
+        data = []
+        while True:
+            rl, __, __ = select.select([self.read2], [], [], 1.)
+            if rl == []:
+                print 'nothing came back'
+                continue
+            current = os.read(self.read2, 1024)
+            data.append(current)
+            if current.strip().endswith('</HTML>'):
+                break
+        return data
+
+    def run(self):
+        self.running = True
+        while self.running:
+            rl, __, __ = select.select([self.read1], [], [], 1.)
+            if rl == []:
+                continue
+
+            os.read(self.read1, 1024)
+
+            for item in _ITEMS:
+                os.write(self.write2, item + '\n')
+
+    def stop(self):
+        self.running = False
+        self.join()
+        for f in (self.read1, self.read2, self.write1, self.write2):
+            os.close(f)
+
+
+def setup_bench():
+    global _DB
+    _DB = _FakeDBThread()
+    _DB.start()
+    time.sleep(0.2)
+
+
+def teardown_bench():
+    if _DB is not None:
+        _DB.stop()
+
+
+_100BYTES = '*' * 100 + '\n'
+
+
 def bench_app(environ, start_response):
-    start = time.time()
     status = '200 OK'
-    headers = [('Content-type', 'text/plain')]
+    headers = [('Content-type', 'text/html')]
     start_response(status, headers)
 
     # math
     for i in range(10000):
         10 * 1000 * 1000
 
-    time.sleep(.1)
+    duration = random.randint(25, 50) + 50
+    time.sleep(duration / 1000)
 
-    # I/O
-    fd, path = tempfile.mkstemp()
-    for i in range(10000):
-        os.write(fd, str(i))
-    os.close(fd)
-    os.remove(path)
-    return ['%.4f' % (time.time() - start)]
+    # I/O - sending 100 bytes, getting back an HTML page
+    result = []
+    if _DB is not None:
+        _DB.send_to_db(_100BYTES)
+        for line in _DB.get_from_db():
+            result.append(line)
+    return result
 
 
 def create_socket(host, port, family=socket.AF_INET, type=socket.SOCK_STREAM,

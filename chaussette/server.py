@@ -30,9 +30,9 @@ def main():
                         choices=backends())
     parser.add_argument('application', default='chaussette.util.hello_app',
                         nargs='?')
-
+    parser.add_argument('--pre-hook', type=str, default=None)
+    parser.add_argument('--post-hook', type=str, default=None)
     parser.add_argument('--django-settings', type=str, default=None)
-
     args = parser.parse_args()
 
     application = args.application
@@ -47,12 +47,28 @@ def main():
     else:
         host = args.host
 
-    httpd = make_server(app, host=host, port=args.port, backend=args.backend,
-                        backlog=args.backlog)
+    # pre-hook ?
+    if args.pre_hook is not None:
+        pre_hook = resolve_name(args.pre_hook)
+        print('Running the pre-hook %r' % pre_hook)
+        pre_hook()
+
+    # post-hook ?
+    if args.post_hook is not None:
+        post_hook = resolve_name(args.post_hook)
+    else:
+        post_hook = None
+
     try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        sys.exit(0)
+        httpd = make_server(app, host=host, port=args.port,
+                            backend=args.backend, backlog=args.backlog)
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            sys.exit(0)
+    finally:
+        print('Running the post-hook %r' % post_hook)
+        post_hook()
 
 
 if __name__ == '__main__':
