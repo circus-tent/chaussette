@@ -1,7 +1,8 @@
 from setuptools import setup, find_packages
 
 
-install_requires = ['waitress']
+install_requires = []
+
 
 with open('README.rst') as f:
     README = f.read()

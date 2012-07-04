@@ -26,7 +26,7 @@ def main():
     group.add_argument('--host', default='localhost')
     group.add_argument('--fd', type=int, default=-1)
     group.add_argument('--backlog', type=int, default=2048)
-    parser.add_argument('--backend', type=str, default='waitress',
+    parser.add_argument('--backend', type=str, default='wsgiref',
                         choices=backends())
     parser.add_argument('application', default='chaussette.util.hello_app',
                         nargs='?')
