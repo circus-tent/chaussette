@@ -1,7 +1,7 @@
 Chaussette
 ==========
 
-Chaussette is a WSGI server for Circus.
+Chaussette is a WSGI server.
 
 Links:
 
