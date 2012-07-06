@@ -116,12 +116,12 @@ class _FakeDBThread(threading.Thread):
 
 def setup_bench(config):
     # early patch
-    #if config.backend in ('gevent', 'fastgevent'):
-    from gevent import monkey
-    monkey.patch_all()
-    #elif config.backend == 'meinheld':
-    #    from meinheld import patch
-    #    patch.patch_all()
+    if config.backend in ('gevent', 'fastgevent'):
+        from gevent import monkey
+        monkey.patch_all()
+    elif config.backend == 'meinheld':
+        from meinheld import patch
+        patch.patch_all()
 
     # starting 10 threads in the background
     for i in range(10):
@@ -130,8 +130,6 @@ def setup_bench(config):
         _DBS.put(th)
 
     time.sleep(0.2)
-
-setup_bench(None)
 
 
 def teardown_bench(config):
