@@ -9,7 +9,7 @@ with open('README.rst') as f:
 
 
 setup(name='chaussette',
-      version='0.3',
+      version='0.4',
       url='http://chaussette.readthedocs.org',
       packages=find_packages(),
       description=("A WSGI Server for Circus"),
