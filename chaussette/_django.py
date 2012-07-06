@@ -13,11 +13,10 @@ def django_app(path, settings_module=None, python_path=None):
     if settings_module is not None:
         os.environ['DJANGO_SETTINGS_MODULE'] = settings_module
 
-    if python_path is not None and python_path not in sys.path:
-        sys.path.insert(0, python_path)
-
-    if path not in sys.path:
-        sys.path.insert(0, path)
+    if python_path is not None:
+        python_path = os.path.abspath(python_path)
+        if python_path not in sys.path:
+            sys.path.insert(0, python_path)
 
     import django.core.handlers.wsgi
     return django.core.handlers.wsgi.WSGIHandler()
