@@ -33,12 +33,14 @@ def main():
     parser.add_argument('--pre-hook', type=str, default=None)
     parser.add_argument('--post-hook', type=str, default=None)
     parser.add_argument('--django-settings', type=str, default=None)
+    parser.add_argument('--python-path', type=str, default=None)
     args = parser.parse_args()
 
     application = args.application
 
     if application.startswith('django:'):
-        app = django_app(application.split(':')[-1], args.django_settings)
+        app = django_app(application.split(':')[-1], args.django_settings,
+                         args.python_path)
     else:
         app = resolve_name(application)
 
