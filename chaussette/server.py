@@ -1,4 +1,4 @@
-import sys
+import sys, os
 import argparse
 
 from chaussette.util import resolve_name
@@ -20,6 +20,8 @@ def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048):
 
 
 def main():
+    sys.path.append(os.curdir)
+
     parser = argparse.ArgumentParser(description='Run some watchers.')
     parser.add_argument('--port', type=int, default=8080)
     group = parser.add_mutually_exclusive_group()
