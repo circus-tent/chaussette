@@ -12,45 +12,36 @@ The particularity of **Chaussette** is that it can either bind a socket
 on a port like any other server does **or** run against **already opened
 sockets**.
 
-That makes **Chaussette** the best companion to run a WSGI ord Djando
+That makes **Chaussette** the best companion to run a WSGI or Django
 stack in `Circus <http://circus.io>`_.
 
 
 Usage
------
+=====
+
+You can run a plain WSGI application, a Django application, or a Paste application.
+To get all options, just run *chaussette --help*.
+
+
+Running a plain WSGI application
+--------------------------------
 
 **Chaussette** provides a console script you can launch against a WSGI
 application, like any WSGI server out there:
 
 .. code-block:: bash
 
-    $ chaussette myapp
+    $ chaussette mypackage.myapp
     Application is <function myapp at 0x104d97668>
     Serving on localhost:8080
     Using <class chaussette.backend._wsgiref.ChaussetteServer at 0x104e58d50> as a backend
-
-
-**Chaussette** has a specific mode to run against an existing open socket.
-This can only be used when Chaussette is forked from another process that has created
-the socket.
-
-.. code-block:: bash
-
-    $ chaussette --fd 12 myapp
-    Application is <function myapp at 0x104d97668>
-    Serving on fd://12
-    Using <class chaussette.backend._wsgiref.ChaussetteServer at 0x104e58d50> as a backend
-
-
-To get more options, just run *chaussette --help*.
-
 
 
 Running a Django application
 ----------------------------
 
 **Chaussette** will let you run a Django project. You just need to use to provide the
-path to the project in the **application**, prefixed with **django:**
+path to the project in the **application** argument, prefixed with **django:**
 
 You can optionally provide the name of the settings module with **--django-settings**,
 when not provided, **Chaussette** will try to find it in the project directory and
@@ -60,14 +51,33 @@ Here's an example:
 
 .. code-block:: bash
 
-    $ bin/chaussette django:path/to/mysite --backend gevent --django-settings mysite.settings
+    $ chaussette django:path/to/mysite --backend gevent --django-settings mysite.settings
     Application is <django.core.handlers.wsgi.WSGIHandler object at 0x10ec3f350>
     Serving on localhost:8080
     Using <class 'chaussette.backend._gevent.Server'> as a backend
 
 
-Running in Circus
------------------
+Running a Python Paste application
+----------------------------------
+
+**Chaussette** will let you run a project based on a
+`Python Paste <http://pythonpaste.org/>`_ configuration file.
+
+You just need to use to provide the
+path to the configuration file in the **application**, prefixed with **paste:**
+
+Here's an example:
+
+.. code-block:: bash
+
+    $ chaussette paste:path/to/configuration.ini
+    $ Application is <mozsvc.middlewares.CatchErrorMiddleware object at 0x10d4fdad0>
+    $ Serving on localhost:8080
+    $ Using <class chaussette.backend._wsgiref.ChaussetteServer at 0x10cc7e668> as a backend
+
+
+Using Chaussette in Circus
+==========================
 
 The typical use case is to run Chaussette processes in `Circus <http://circus.io>`_,
 which takes care of binding the sockets and spawning Chaussette processes.
@@ -99,7 +109,7 @@ value to the Chaussette process, by replacing *${socket:web}* by the file number
 
 
 Backends
---------
+========
 
 Chaussette is just a bit of glue code on the top of existing WSGI servers,
 and is organized around **back ends**.
@@ -133,7 +143,7 @@ If you curious about how each on of those backends performs, you can read:
 
 
 Rationale and Design
---------------------
+====================
 
 Most WGSI servers out there provide advanced features to scale your web
 applications, like multi-threading or multi-processing. Depending on the
@@ -156,7 +166,7 @@ For more information about this design, read :
 
 
 Useful links
-------------
+============
 
 - Repository : https://github.com/tarekziade/chaussette
 
