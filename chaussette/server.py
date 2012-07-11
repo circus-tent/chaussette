@@ -41,6 +41,9 @@ def main():
     if application.startswith('django:'):
         app = django_app(application.split(':')[-1], args.django_settings,
                          args.python_path)
+    elif application.startswith('paste:'):
+        from chaussette._paste import paste_app
+        app = paste_app(application.split(':')[-1])
     else:
         app = resolve_name(application)
 
