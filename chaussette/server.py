@@ -1,7 +1,8 @@
-import sys, os
+import sys
+import os
 import argparse
 
-from chaussette.util import resolve_name
+from chaussette.util import import_string
 from chaussette.backend import get, backends
 from chaussette._django import django_app
 
@@ -47,7 +48,7 @@ def main():
         from chaussette._paste import paste_app
         app = paste_app(application.split(':')[-1])
     else:
-        app = resolve_name(application)
+        app = import_string(application)
 
     if args.fd != -1:
         host = 'fd://%d' % args.fd
@@ -56,13 +57,13 @@ def main():
 
     # pre-hook ?
     if args.pre_hook is not None:
-        pre_hook = resolve_name(args.pre_hook)
+        pre_hook = import_string(args.pre_hook)
         print('Running the pre-hook %r' % pre_hook)
         pre_hook(args)
 
     # post-hook ?
     if args.post_hook is not None:
-        post_hook = resolve_name(args.post_hook)
+        post_hook = import_string(args.post_hook)
     else:
         post_hook = None
 

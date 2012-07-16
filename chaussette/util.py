@@ -7,6 +7,7 @@ import select
 import random
 import Queue
 
+
 class ImportStringError(ImportError):
     """Provides information about a failed :func:`import_string` attempt."""
 
@@ -49,6 +50,7 @@ class ImportStringError(ImportError):
         return '<%s(%r, %r)>' % (self.__class__.__name__, self.import_name,
                                  self.exception)
 
+
 def import_string(import_name, silent=False):
     """Imports an object based on a string.  This is useful if you want to
     use import paths as endpoints or something similar.  An import path can
@@ -90,48 +92,6 @@ def import_string(import_name, silent=False):
     except ImportError, e:
         if not silent:
             raise ImportStringError(import_name, e), None, sys.exc_info()[2]
-
-def resolve_name(name):
-    """Resolve a name like ``module.object`` to an object and return it.
-
-    This functions supports packages and attributes without depth limitation:
-    ``package.package.module.class.class.function.attr`` is valid input.
-    However, looking up builtins is not directly supported: use
-    ``__builtin__.name``.
-
-    Raises ImportError if importing the module fails or if one requested
-    attribute is not found.
-    """
-    if '.' not in name:
-        # shortcut
-        __import__(name)
-        return sys.modules[name]
-
-    # FIXME clean up this code!
-    parts = name.split('.')
-    cursor = len(parts)
-    module_name = parts[:cursor]
-    ret = ''
-
-    while cursor > 0:
-        try:
-            ret = __import__('.'.join(module_name))
-            break
-        except ImportError:
-            cursor -= 1
-            module_name = parts[:cursor]
-
-    if ret == '':
-        raise ImportError(parts[0])
-
-    for part in parts[1:]:
-        try:
-            ret = getattr(ret, part)
-        except AttributeError, exc:
-            raise ImportError(exc)
-
-    return ret
-resolve_name = import_string
 
 
 def hello_app(environ, start_response):
