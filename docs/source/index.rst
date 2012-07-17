@@ -40,22 +40,21 @@ application, like any WSGI server out there:
 Running a Django application
 ----------------------------
 
-**Chaussette** will let you run a Django project. You just need to use to provide the
-path to the project in the **application** argument, prefixed with **django:**
-
-You can optionally provide the name of the settings module with **--django-settings**,
-when not provided, **Chaussette** will try to find it in the project directory and
-pass it for you.
+**Chaussette** allows you to run a Django project. You just need to provide the
+Python import path of the WSGI application, commonly located in the Django
+project's ``wsgi.py`` file. For further information about how the ``wsgi.py``
+file should look like see the `Django documentation`_.
 
 Here's an example:
 
 .. code-block:: bash
 
-    $ chaussette django:path/to/mysite --backend gevent --django-settings mysite.settings
+    $ chaussette --backend gevent mysite.wsgi.application
     Application is <django.core.handlers.wsgi.WSGIHandler object at 0x10ec3f350>
     Serving on localhost:8080
     Using <class 'chaussette.backend._gevent.Server'> as a backend
 
+.. _`Django documentation`: https://docs.djangoproject.com/en/1.4/howto/deployment/wsgi/
 
 Running a Python Paste application
 ----------------------------------
