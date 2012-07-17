@@ -4,7 +4,6 @@ import argparse
 
 from chaussette.util import import_string
 from chaussette.backend import get, backends
-from chaussette._django import django_app
 
 
 def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048):
@@ -35,16 +34,12 @@ def main():
                         nargs='?')
     parser.add_argument('--pre-hook', type=str, default=None)
     parser.add_argument('--post-hook', type=str, default=None)
-    parser.add_argument('--django-settings', type=str, default=None)
     parser.add_argument('--python-path', type=str, default=None)
     args = parser.parse_args()
 
     application = args.application
 
-    if application.startswith('django:'):
-        app = django_app(application.split(':')[-1], args.django_settings,
-                         args.python_path)
-    elif application.startswith('paste:'):
+    if application.startswith('paste:'):
         from chaussette._paste import paste_app
         app = paste_app(application.split(':')[-1])
     else:
