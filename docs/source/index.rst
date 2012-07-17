@@ -169,5 +169,5 @@ For more information about this design, read :
 Useful links
 ============
 
-- Repository : https://github.com/tarekziade/chaussette
+- Repository : https://github.com/mozilla-services/chaussette
 
