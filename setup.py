@@ -1,7 +1,16 @@
+import sys
 from setuptools import setup, find_packages
 
 
+if not hasattr(sys, 'version_info') or sys.version_info < (2, 6, 0, 'final'):
+    raise SystemExit("Chaussette requires Python 2.6 or later.")
+
 install_requires = []
+
+try:
+    import argparse     # NOQA
+except ImportError:
+    install_requires.append('argparse')
 
 
 with open('README.rst') as f:
