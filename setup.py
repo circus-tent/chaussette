@@ -34,7 +34,7 @@ setup(name='chaussette',
         "License :: OSI Approved :: Apache Software License",
         "Development Status :: 3 - Alpha"],
       install_requires=install_requires,
-      test_requires=['nose'],
+      tests_require=['nose'],
       test_suite='nose.collector',
       entry_points="""
       [console_scripts]
