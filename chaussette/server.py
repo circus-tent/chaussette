@@ -2,19 +2,22 @@ import sys
 import os
 import argparse
 
-from chaussette.util import import_string
+from chaussette import logger as chaussette_logger
+from chaussette.util import import_string, configure_logger, LOG_LEVELS
 from chaussette.backend import get, backends
 
 
-def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048):
-    print('Application is %r' % app)
+def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
+                logger=None):
+    logger = logger or chaussette_logger
+    logger.info('Application is %r' % app)
     if host.startswith('fd://'):
-        print('Serving on %s' % host)
+        logger.info('Serving on %s' % host)
     else:
-        print('Serving on %s:%s' % (host, port))
+        logger.info('Serving on %s:%s' % (host, port))
 
     server_class = get(backend)
-    print('Using %r as a backend' % server_class)
+    logger.info('Using %r as a backend' % server_class)
     server = server_class((host, port), app, backlog=backlog)
     return server
 
@@ -35,9 +38,19 @@ def main():
     parser.add_argument('--pre-hook', type=str, default=None)
     parser.add_argument('--post-hook', type=str, default=None)
     parser.add_argument('--python-path', type=str, default=None)
+
+    log_levels = LOG_LEVELS.keys() + [key.upper() for key in LOG_LEVELS.keys()]
+    parser.add_argument('--log-level', dest='loglevel', default='info',
+                        choices=log_levels, help="log level")
+
+    parser.add_argument('--log-output', dest='logoutput', default='-',
+                        help="log output")
     args = parser.parse_args()
 
     application = args.application
+
+    logger = chaussette_logger
+    configure_logger(logger)
 
     if application.startswith('paste:'):
         from chaussette._paste import paste_app
@@ -53,7 +66,7 @@ def main():
     # pre-hook ?
     if args.pre_hook is not None:
         pre_hook = import_string(args.pre_hook)
-        print('Running the pre-hook %r' % pre_hook)
+        logger.info('Running the pre-hook %r' % pre_hook)
         pre_hook(args)
 
     # post-hook ?
@@ -64,14 +77,15 @@ def main():
 
     try:
         httpd = make_server(app, host=host, port=args.port,
-                            backend=args.backend, backlog=args.backlog)
+                            backend=args.backend, backlog=args.backlog,
+                            logger=logger)
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
             sys.exit(0)
     finally:
         if post_hook is not None:
-            print('Running the post-hook %r' % post_hook)
+            logger.info('Running the post-hook %r' % post_hook)
             post_hook(args)
 
 
