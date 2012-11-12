@@ -94,7 +94,7 @@ Minimal example:
     stats_endpoint = tcp://127.0.0.1:5557
 
     [watcher:web]
-    cmd = chaussette --fd ${socket:web} --backend meinheld server.app
+    cmd = chaussette --fd $(circus.sockets.web) --backend meinheld server.app
     use_sockets = True
     numprocesses = 5
 
