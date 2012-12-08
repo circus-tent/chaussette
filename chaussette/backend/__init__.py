@@ -11,6 +11,11 @@ try:
 except ImportError:
     pass
 
+try:
+    from chaussette.backend import _geventwebsocket
+    _backends['geventwebsocket'] = _geventwebsocket.Server
+except ImportError:
+    pass
 
 try:
     from chaussette.backend import _meinheld
