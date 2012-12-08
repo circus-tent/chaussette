@@ -5,3 +5,4 @@ Here's a list of other contributors:
 - Myoung-su Shin
 - Trey Long
 - Jannis Leidel
+- Danilo Maurizio
