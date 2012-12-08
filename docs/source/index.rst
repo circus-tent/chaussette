@@ -122,6 +122,9 @@ but it also provides more efficient back ends:
 - **meinheld** -- based on Meinheld's fast C server
 - **waitress** -- based on Pyramid's waitress pure Python web server
 - **eventlet** -- based on Eventlet's wsgi server
+- **geventwebsocket** -- Gevent's **pywsgi** server coupled with
+  **geventwebsocket** handler.
+
 
 You can select your backend by using the **--backend** option and providing
 its name.
@@ -133,6 +136,8 @@ are installed:
 - **meinheld** : `pip install meinheld`
 - **waitress** : `pip install waitress`
 - **eventlet** : `pip install eventlet`
+- **geventwebsocket**: `pip install gevent-websocket`
+
 
 If you want to add your favorite WSGI Server as a backend to Chaussette,
 send me an e-mail !
