@@ -1,5 +1,6 @@
 import sys
 from setuptools import setup, find_packages
+from chaussette import __version__
 
 
 if not hasattr(sys, 'version_info') or sys.version_info < (2, 6, 0, 'final'):
@@ -18,7 +19,7 @@ with open('README.rst') as f:
 
 
 setup(name='chaussette',
-      version='0.5',
+      version=__version__,
       url='http://chaussette.readthedocs.org',
       packages=find_packages(),
       description=("A WSGI Server for Circus"),
