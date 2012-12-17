@@ -246,13 +246,27 @@ def bench_app(environ, start_response):
 
 def create_socket(host, port, family=socket.AF_INET, type=socket.SOCK_STREAM,
                   backlog=2048, blocking=True):
+    if family == socket.AF_UNIX and not host.startswith('unix:'):
+        raise ValueError('Your host needs to have the unix:/path form')
+    if host.startswith('unix:') and family != socket.AF_UNIX:
+        # forcing to unix socket family
+        family = socket.AF_UNIX
+
     if host.startswith('fd://'):
         # just recreate the socket
         fd = int(host.split('://')[1])
         sock = socket.fromfd(fd, family, type)
     else:
         sock = socket.socket(family, type)
-        sock.bind((host, port))
+        if host.startswith('unix:'):
+            filename = host[len('unix:'):]
+            try:
+                os.remove(filename)
+            except OSError:
+                pass
+            sock.bind(filename)
+        else:
+            sock.bind((host, port))
         sock.listen(backlog)
 
     if blocking:

@@ -6,9 +6,15 @@ from chaussette.util import create_socket
 
 
 class ChaussetteHandler(WSGIRequestHandler):
+    def __init__(self, sock, client_addr, server):
+        if server.socket_type == socket.AF_UNIX:
+            client_addr = ['0.0.0.0']
+        WSGIRequestHandler.__init__(self, sock, client_addr, server)
 
     def address_string(self):
-        return 'FD'     # XXX see how to do this
+        if self.server.byfd or self.server.socket_type == socket.AF_UNIX:
+            return '0.0.0.0'
+        return WSGIRequestHandler.address_string(self)
 
 
 class ChaussetteServer(WSGIServer):
@@ -17,13 +23,18 @@ class ChaussetteServer(WSGIServer):
     handler_class = ChaussetteHandler
 
     def __init__(self, server_address, app, bind_and_activate=True,
-                 backlog=2048):
+                 backlog=2048, socket_type=socket.SOCK_STREAM,
+                 address_family=socket.AF_INET):
+        self.address_family = address_family
+        self.socket_type = socket_type
         BaseServer.__init__(self, server_address, self.handler_class)
         self.set_app(app)
 
         host, port = self.server_address = server_address
-        self.socket = create_socket(host, port, self.address_family,
-                                    self.socket_type, backlog=backlog)
+        self.socket = create_socket(host, port,
+                                    family=self.address_family,
+                                    type=self.socket_type,
+                                    backlog=backlog)
         self.byfd = host.startswith('fd://')
         if bind_and_activate:
             self.server_bind()

@@ -1,17 +1,28 @@
 import socket
-from gevent.pywsgi import WSGIServer
+from gevent.pywsgi import WSGIServer, WSGIHandler
 from gevent import monkey
 from chaussette.util import create_socket
+
+
+class CustomWSGIHandler(WSGIHandler):
+    def __init__(self, sock, address, server, rfile=None):
+        if server.socket_type == socket.AF_UNIX:
+            address = ['0.0.0.0']
+        WSGIHandler.__init__(self, sock, address, server, rfile)
 
 
 class Server(WSGIServer):
 
     address_family = socket.AF_INET
     socket_type = socket.SOCK_STREAM
+    handler_class = CustomWSGIHandler
 
     def __init__(self, listener, application=None, backlog=None,
                  spawn='default', log='default', handler_class=None,
-                 environ=None, **ssl_args):
+                 environ=None, socket_type=socket.SOCK_STREAM,
+                 address_family=socket.AF_INET, **ssl_args):
+        self.address_family = address_family
+        self.socket_type = socket_type
         monkey.noisy = False
         monkey.patch_all()
         host, port = listener
