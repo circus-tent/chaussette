@@ -124,6 +124,8 @@ but it also provides more efficient back ends:
 - **eventlet** -- based on Eventlet's wsgi server
 - **geventwebsocket** -- Gevent's **pywsgi** server coupled with
   **geventwebsocket** handler.
+- **geventws4py** -- Gevent's **pywsgi** server coupled with
+  **ws4py** handler.
 
 
 You can select your backend by using the **--backend** option and providing
@@ -137,6 +139,7 @@ are installed:
 - **waitress** : `pip install waitress`
 - **eventlet** : `pip install eventlet`
 - **geventwebsocket**: `pip install gevent-websocket`
+- **geventws4py**: `pip install ws4py`
 
 
 If you want to add your favorite WSGI Server as a backend to Chaussette,
