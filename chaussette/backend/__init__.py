@@ -18,6 +18,12 @@ except ImportError:
     pass
 
 try:
+    from chaussette.backend import _geventws4py
+    _backends['geventws4py'] = _geventws4py.Server
+except ImportError:
+    pass
+
+try:
     from chaussette.backend import _meinheld
     _backends['meinheld'] = _meinheld.Server
 except ImportError:
