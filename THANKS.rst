@@ -6,3 +6,4 @@ Here's a list of other contributors:
 - Trey Long
 - Jannis Leidel
 - Danilo Maurizio
+- Emmanuel Raviart
