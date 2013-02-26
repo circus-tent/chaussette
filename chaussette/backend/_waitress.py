@@ -6,7 +6,7 @@ class Server(WSGIServer):
     address_family = socket.AF_INET
     socket_type = socket.SOCK_STREAM
 
-    def __init__(self, listener, application=None, backlog=2048, 
+    def __init__(self, listener, application=None, backlog=2048,
                  socket_type=socket.SOCK_STREAM,
                  address_family=socket.AF_INET):
         host, port = listener
