@@ -76,7 +76,7 @@ def main():
     application = args.application
 
     logger = chaussette_logger
-    configure_logger(logger)
+    configure_logger(logger, args.loglevel, args.logoutput)
 
     if application.startswith('paste:'):
         from chaussette._paste import paste_app
