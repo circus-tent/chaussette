@@ -44,6 +44,14 @@ except ImportError:
     pass
 
 
+try:
+    from chaussette.backend import _socketio
+    _backends['socketio'] = _socketio.Server
+except ImportError:
+    pass
+
+
+
 def register(name, server):
     _backends[name] = server
 
