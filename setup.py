@@ -40,4 +40,7 @@ setup(name='chaussette',
       entry_points="""
       [console_scripts]
       chaussette = chaussette.server:main
+
+       [paste.server_runner]
+       main = chaussette.server:serve_paste
       """)

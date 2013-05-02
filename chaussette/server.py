@@ -43,6 +43,51 @@ _SOCKET_TYPE = {
 _NO_UNIX = ('waitress', 'fastgevent', 'eventlet')
 
 
+def serve_paste(app, global_conf, **kw):
+    port = int(kw.get(kw['port'], 8080))
+    host = kw.get('host', '127.0.0.1')
+    backlog = int(kw.get('backlog', 2048))
+    backend = kw.get('backend', 'wsgiref')
+    address_family = kw.get('address_family', 'AF_INET')
+    address_family = _ADDRESS_FAMILY[address_family]
+    socket_type = kw.get('socket_type', 'SOCK_STREAM')
+    socket_type = _SOCKET_TYPE[socket_type]
+    loglevel = kw.get('log_level', 'info')
+    logoutput = kw.get('log_output', '-')
+    logger = chaussette_logger
+    configure_logger(logger, loglevel, logoutput)
+
+    if address_family == socket.AF_UNIX and backend in _NO_UNIX:
+        logger.info('Sorry %r does not support unix sockets' % backend)
+        sys.exit(0)
+
+    pre_hook = kw.get('pre_hook')
+    if pre_hook is not None:
+        pre_hook = import_string(args.pre_hook)
+        logger.info('Running the pre-hook %r' % pre_hook)
+        pre_hook(args)
+
+    post_hook = kw.get('post_hook')
+    if post_hook is not None:
+        post_hook = import_string(post_hook)
+
+    try:
+        httpd = make_server(app, host=host, port=port,
+                            backend=backend, backlog=backlog,
+                            logger=logger,
+                            address_family=address_family,
+                            socket_type=socket_type)
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            sys.exit(0)
+    finally:
+        if post_hook is not None:
+            logger.info('Running the post-hook %r' % post_hook)
+            post_hook(args)
+    return 0
+
+
 def main():
     sys.path.append(os.curdir)
 
