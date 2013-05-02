@@ -51,7 +51,6 @@ except ImportError:
     pass
 
 
-
 def register(name, server):
     _backends[name] = server
 

@@ -63,9 +63,9 @@ def serve_paste(app, global_conf, **kw):
 
     pre_hook = kw.get('pre_hook')
     if pre_hook is not None:
-        pre_hook = import_string(args.pre_hook)
+        pre_hook = import_string(pre_hook)
         logger.info('Running the pre-hook %r' % pre_hook)
-        pre_hook(args)
+        pre_hook(kw)
 
     post_hook = kw.get('post_hook')
     if post_hook is not None:
@@ -84,7 +84,7 @@ def serve_paste(app, global_conf, **kw):
     finally:
         if post_hook is not None:
             logger.info('Running the post-hook %r' % post_hook)
-            post_hook(args)
+            post_hook(kw)
     return 0
 
 
