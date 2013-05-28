@@ -12,7 +12,8 @@ class Server(WSGIServer):
 
     def __init__(self, listener, application=None, backlog=None,
                  spawn='default', log='default', handler_class=None,
-                 environ=None, **ssl_args):
+                 environ=None, socket_type=socket.SOCK_STREAM,
+                 address_family=socket.AF_INET, **ssl_args):
         monkey.noisy = False
         monkey.patch_all()
         host, port = listener
