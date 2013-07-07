@@ -1,3 +1,5 @@
+import configparser
+import logging.config
 import os.path
 try:
     from paste.deploy import loadapp
@@ -6,4 +8,9 @@ except ImportError:
 
 
 def paste_app(path):
-    return loadapp('config:%s' % os.path.abspath(path))
+    abspath = os.path.abspath(path)
+    try:
+        logging.config.fileConfig(abspath)
+    except configparser.NoSectionError:
+        pass
+    return loadapp('config:%s' % abspath)
