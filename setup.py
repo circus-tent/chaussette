@@ -43,5 +43,4 @@ setup(name='chaussette',
 
        [paste.server_runner]
        main = chaussette.server:serve_paste
-      """,
-      use_2to3=True)
+      """)
