@@ -1,6 +1,6 @@
 import socket
 from wsgiref.simple_server import WSGIServer, WSGIRequestHandler
-from SocketServer import BaseServer
+from six.moves import socketserver
 
 from chaussette.util import create_socket
 
@@ -27,7 +27,8 @@ class ChaussetteServer(WSGIServer):
                  address_family=socket.AF_INET):
         self.address_family = address_family
         self.socket_type = socket_type
-        BaseServer.__init__(self, server_address, self.handler_class)
+        socketserver.BaseServer.__init__(self, server_address,
+                                         self.handler_class)
         self.set_app(app)
 
         host, port = self.server_address = server_address

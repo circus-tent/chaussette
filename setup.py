@@ -6,7 +6,7 @@ from chaussette import __version__
 if not hasattr(sys, 'version_info') or sys.version_info < (2, 6, 0, 'final'):
     raise SystemExit("Chaussette requires Python 2.6 or later.")
 
-install_requires = []
+install_requires = ['six >= 1.3.0']
 
 try:
     import argparse     # NOQA
