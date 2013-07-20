@@ -29,11 +29,11 @@ setup(name='chaussette',
       include_package_data=True,
       zip_safe=False,
       classifiers=[
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
-        "License :: OSI Approved :: Apache Software License",
-        "Development Status :: 3 - Alpha"],
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 2.6",
+          "Programming Language :: Python :: 2.7",
+          "License :: OSI Approved :: Apache Software License",
+          "Development Status :: 3 - Alpha"],
       install_requires=install_requires,
       tests_require=['nose'],
       test_suite='nose.collector',
@@ -41,6 +41,6 @@ setup(name='chaussette',
       [console_scripts]
       chaussette = chaussette.server:main
 
-       [paste.server_runner]
-       main = chaussette.server:serve_paste
+      [paste.server_runner]
+      main = chaussette.server:serve_paste
       """)
