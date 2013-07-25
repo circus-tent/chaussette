@@ -8,7 +8,7 @@ from chaussette.util import import_string, configure_logger, LOG_LEVELS
 from chaussette.backend import get, backends
 
 
-def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
+def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048, spawn=None,
                 logger=None, address_family=socket.AF_INET,
                 socket_type=socket.SOCK_STREAM):
     logger = logger or chaussette_logger
@@ -20,9 +20,21 @@ def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
 
     server_class = get(backend)
     logger.info('Using %r as a backend' % server_class)
-    server = server_class((host, port), app, backlog=backlog,
-                          address_family=address_family,
-                          socket_type=socket_type)
+    if spawn:
+        logger.info('Spawning method: %r' % spawn)
+    server_class_kwargs = {
+        'backlog': backlog,
+        'address_family': address_family,
+        'socket_type': socket_type,
+    }
+    if spawn is not None:
+        server_class_kwargs['spawn'] = spawn
+
+    try:
+        server = server_class((host, port), app, **server_class_kwargs)
+    except TypeError:
+        logger.exception("Failed to create backend %s, you might be trying to use --spawn on a backend that does not support it" % backend)
+        raise
     return server
 
 
@@ -104,6 +116,7 @@ def main():
     group.add_argument('--backlog', type=int, default=2048)
     parser.add_argument('--backend', type=str, default='wsgiref',
                         choices=backends())
+    parser.add_argument('--spawn', type=int, default=None, help="Spawn type, only makes sense if the backend supports it (gevent)")
     parser.add_argument('application', default='chaussette.util.hello_app',
                         nargs='?')
     parser.add_argument('--pre-hook', type=str, default=None)
@@ -153,7 +166,7 @@ def main():
 
     try:
         httpd = make_server(app, host=host, port=args.port,
-                            backend=args.backend, backlog=args.backlog,
+                            backend=args.backend, backlog=args.backlog, spawn=args.spawn,
                             logger=logger,
                             address_family=address_family,
                             socket_type=_SOCKET_TYPE[args.socket_type])
