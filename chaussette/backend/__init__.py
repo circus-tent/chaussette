@@ -60,4 +60,4 @@ def get(name):
 
 
 def backends():
-    return _backends.keys()
+    return sorted(_backends.keys())
