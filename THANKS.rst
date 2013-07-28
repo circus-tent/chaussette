@@ -8,3 +8,4 @@ Here's a list of other contributors:
 - Danilo Maurizio
 - Emmanuel Raviart
 - Pedro Romano
+- Victor Fernandez de Alba
