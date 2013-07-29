@@ -7,3 +7,5 @@ Here's a list of other contributors:
 - Jannis Leidel
 - Danilo Maurizio
 - Emmanuel Raviart
+- Pedro Romano
+- Victor Fernandez de Alba

@@ -142,7 +142,7 @@ are installed:
 - **eventlet** : `pip install eventlet`
 - **geventwebsocket**: `pip install gevent-websocket`
 - **geventws4py**: `pip install ws4py`
-- **socketio**: `pip installl gevent-socketio`
+- **socketio**: `pip install gevent-socketio`
 
 
 If you want to add your favorite WSGI Server as a backend to Chaussette,

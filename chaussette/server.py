@@ -1,6 +1,7 @@
 import sys
 import os
 import argparse
+import itertools
 import socket
 
 from chaussette import logger as chaussette_logger
@@ -106,9 +107,9 @@ def main():
     parser = argparse.ArgumentParser(description='Run some watchers.')
     parser.add_argument('--port', type=int, default=8080)
     parser.add_argument('--address-family', type=str, default='AF_INET',
-                        choices=_ADDRESS_FAMILY.keys())
+                        choices=sorted(_ADDRESS_FAMILY.keys()))
     parser.add_argument('--socket-type', type=str, default='SOCK_STREAM',
-                        choices=_SOCKET_TYPE.keys())
+                        choices=sorted(_SOCKET_TYPE.keys()))
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--host', default='localhost')
     group.add_argument('--fd', type=int, default=-1)
@@ -123,9 +124,10 @@ def main():
     parser.add_argument('--post-hook', type=str, default=None)
     parser.add_argument('--python-path', type=str, default=None)
 
-    log_levels = LOG_LEVELS.keys() + [key.upper() for key in LOG_LEVELS.keys()]
+    log_levels = itertools.chain.from_iterable((key.upper(), key)
+                                               for key in LOG_LEVELS.keys())
     parser.add_argument('--log-level', dest='loglevel', default='info',
-                        choices=log_levels, help="log level")
+                        choices=sorted(log_levels), help="log level")
 
     parser.add_argument('--log-output', dest='logoutput', default='-',
                         help="log output")

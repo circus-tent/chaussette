@@ -5,9 +5,11 @@ import socket
 import threading
 import select
 import random
-import Queue
+from six.moves import queue
 import logging
 import fcntl
+
+import six
 
 
 LOG_LEVELS = {
@@ -100,8 +102,8 @@ def import_string(import_name, silent=False):
     :return: imported object
     """
     # force the import name to automatically convert to strings
-    if isinstance(import_name, unicode):
-        import_name = str(import_name)
+    if not six.PY3 and isinstance(import_name, unicode):
+        import_name = import_name.encode('utf-8')
     try:
         if ':' in import_name:
             module, obj = import_name.split(':', 1)
@@ -111,7 +113,7 @@ def import_string(import_name, silent=False):
             return __import__(import_name)
             # __import__ is not able to handle unicode strings in the fromlist
         # if the module is a package
-        if isinstance(obj, unicode):
+        if not six.PY3 and isinstance(obj, unicode):
             obj = obj.encode('utf-8')
         try:
             return getattr(__import__(module, None, None, [obj]), obj)
@@ -121,9 +123,10 @@ def import_string(import_name, silent=False):
             modname = module + '.' + obj
             __import__(modname)
             return sys.modules[modname]
-    except ImportError, e:
+    except ImportError as e:
         if not silent:
-            raise ImportStringError(import_name, e), None, sys.exc_info()[2]
+            six.reraise(ImportStringError, ImportStringError(import_name, e),
+                        sys.exc_info()[2])
 
 
 def hello_app(environ, start_response):
@@ -134,7 +137,7 @@ def hello_app(environ, start_response):
 
 
 _IN = _OUT = None
-_DBS = Queue.Queue()
+_DBS = queue.Queue()
 
 
 _ITEMS = """\
@@ -163,7 +166,7 @@ class _FakeDBThread(threading.Thread):
         while True:
             rl, __, __ = select.select([self.read2], [], [], 1.)
             if rl == []:
-                print 'nothing came back'
+                print('nothing came back')
                 continue
             current = os.read(self.read2, 1024)
             data.append(current)
