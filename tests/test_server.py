@@ -7,8 +7,6 @@ import minimock
 from chaussette.backend import backends, get
 import chaussette.server
 
-__author__ = 'gillesdevaux'
-
 
 class TestServer(unittest.TestCase):
     """

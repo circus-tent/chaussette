@@ -2,4 +2,3 @@
 """
 Test package
 """
-__author__ = 'gillesdevaux'
