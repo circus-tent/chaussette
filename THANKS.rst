@@ -9,3 +9,4 @@ Here's a list of other contributors:
 - Emmanuel Raviart
 - Pedro Romano
 - Victor Fernandez de Alba
+- Gilles Devaux
