@@ -166,20 +166,24 @@ def main():
         logger.info('Sorry %r does not support unix sockets' % args.backend)
         sys.exit(0)
 
-    try:
-        httpd = make_server(app, host=host, port=args.port,
-                            backend=args.backend, backlog=args.backlog, spawn=args.spawn,
-                            logger=logger,
-                            address_family=address_family,
-                            socket_type=_SOCKET_TYPE[args.socket_type])
+    def inner():
         try:
-            httpd.serve_forever()
-        except KeyboardInterrupt:
-            sys.exit(0)
-    finally:
-        if post_hook is not None:
-            logger.info('Running the post-hook %r' % post_hook)
-            post_hook(args)
+            httpd = make_server(app, host=host, port=args.port,
+                                backend=args.backend, backlog=args.backlog,
+                                spawn=args.spawn,
+                                logger=logger,
+                                address_family=address_family,
+                                socket_type=_SOCKET_TYPE[args.socket_type])
+            try:
+                httpd.serve_forever()
+            except KeyboardInterrupt:
+                sys.exit(0)
+        finally:
+            if post_hook is not None:
+                logger.info('Running the post-hook %r' % post_hook)
+                post_hook(args)
+
+    inner()
 
 
 if __name__ == '__main__':
