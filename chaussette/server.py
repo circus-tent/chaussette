@@ -189,7 +189,8 @@ def main():
         try:
             from werkzeug.serving import run_with_reloader
         except ImportError:
-            logger.info('Reloader requires the Werkzeug library')
+            logger.info("Reloader requires Werkzeug: "
+                        "'pip install werkzeug'")
             sys.exit(0)
         run_with_reloader(inner)
     else:
