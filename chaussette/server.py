@@ -117,6 +117,8 @@ def main():
     group.add_argument('--backlog', type=int, default=2048)
     parser.add_argument('--backend', type=str, default='wsgiref',
                         choices=backends())
+    parser.add_argument('--use-reloader', action='store_true',
+                        help="Restart server when source files change")
     parser.add_argument('--spawn', type=int, default=None, help="Spawn type, only makes sense if the backend supports it (gevent)")
     parser.add_argument('application', default='chaussette.util.hello_app',
                         nargs='?')
@@ -183,7 +185,15 @@ def main():
                 logger.info('Running the post-hook %r' % post_hook)
                 post_hook(args)
 
-    inner()
+    if args.use_reloader:
+        try:
+            from werkzeug.serving import run_with_reloader
+        except ImportError:
+            logger.info('Reloader requires the Werkzeug library')
+            sys.exit(0)
+        run_with_reloader(inner)
+    else:
+        inner()
 
 
 if __name__ == '__main__':
