@@ -117,6 +117,8 @@ def main():
     group.add_argument('--backlog', type=int, default=2048)
     parser.add_argument('--backend', type=str, default='wsgiref',
                         choices=backends())
+    parser.add_argument('--use-reloader', action='store_true',
+                        help="Restart server when source files change")
     parser.add_argument('--spawn', type=int, default=None, help="Spawn type, only makes sense if the backend supports it (gevent)")
     parser.add_argument('application', default='chaussette.util.hello_app',
                         nargs='?')
@@ -166,20 +168,33 @@ def main():
         logger.info('Sorry %r does not support unix sockets' % args.backend)
         sys.exit(0)
 
-    try:
-        httpd = make_server(app, host=host, port=args.port,
-                            backend=args.backend, backlog=args.backlog, spawn=args.spawn,
-                            logger=logger,
-                            address_family=address_family,
-                            socket_type=_SOCKET_TYPE[args.socket_type])
+    def inner():
         try:
-            httpd.serve_forever()
-        except KeyboardInterrupt:
+            httpd = make_server(app, host=host, port=args.port,
+                                backend=args.backend, backlog=args.backlog,
+                                spawn=args.spawn,
+                                logger=logger,
+                                address_family=address_family,
+                                socket_type=_SOCKET_TYPE[args.socket_type])
+            try:
+                httpd.serve_forever()
+            except KeyboardInterrupt:
+                sys.exit(0)
+        finally:
+            if post_hook is not None:
+                logger.info('Running the post-hook %r' % post_hook)
+                post_hook(args)
+
+    if args.use_reloader:
+        try:
+            from werkzeug.serving import run_with_reloader
+        except ImportError:
+            logger.info("Reloader requires Werkzeug: "
+                        "'pip install werkzeug'")
             sys.exit(0)
-    finally:
-        if post_hook is not None:
-            logger.info('Running the post-hook %r' % post_hook)
-            post_hook(args)
+        run_with_reloader(inner)
+    else:
+        inner()
 
 
 if __name__ == '__main__':
