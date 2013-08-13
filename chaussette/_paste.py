@@ -1,5 +1,5 @@
 import os
-import ConfigParser
+from six.moves import configparser
 
 from logging.config import fileConfig
 
@@ -11,7 +11,7 @@ except ImportError:
 
 def paste_app(path):
     # Load the logging config from paste.deploy .ini, if any
-    parser = ConfigParser.ConfigParser()
+    parser = configparser.ConfigParser()
     parser.read([path])
     if parser.has_section('loggers'):
         config_file = os.path.abspath(path)
