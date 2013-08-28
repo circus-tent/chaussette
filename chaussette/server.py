@@ -57,7 +57,7 @@ _NO_UNIX = ('waitress', 'fastgevent', 'eventlet')
 
 
 def serve_paste(app, global_conf, **kw):
-    port = int(kw.get(kw['port'], 8080))
+    port = int(kw.get('port', 8080))
     host = kw.get('host', '127.0.0.1')
     backlog = int(kw.get('backlog', 2048))
     backend = kw.get('backend', 'wsgiref')
