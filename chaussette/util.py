@@ -39,7 +39,7 @@ def configure_logger(logger, level='INFO', output="-"):
         close_on_exec(h.stream.fileno())
     fmt = logging.Formatter(LOG_FMT, LOG_DATE_FMT)
     h.setFormatter(fmt)
-    logger.addHandler(h)
+    logger.handlers = [h]
 
 
 class ImportStringError(ImportError):

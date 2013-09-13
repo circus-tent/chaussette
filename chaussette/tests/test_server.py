@@ -14,6 +14,8 @@ import socket
 from chaussette.backend import backends
 import chaussette.server
 from chaussette.server import main
+from chaussette.util import configure_logger
+from chaussette import logger
 
 
 class ThreadedServer(Thread):
@@ -23,7 +25,8 @@ class ThreadedServer(Thread):
         self.backend = backend
 
     def run(self):
-        sys.argv[:] = ['chaussette', '--backend', self.backend]
+        sys.argv[:] = ['chaussette', '--backend', self.backend,
+                       '--log-level', 'CRITICAL']
         try:
             main()
         except Exception:
@@ -41,6 +44,8 @@ class TestServer(unittest.TestCase):
         :return:
         """
         super(TestServer, self).setUp()
+        configure_logger(logger, 'CRITICAL')
+
         self.tt = minimock.TraceTracker()
         try:
             self.old = socket.socket.bind
@@ -135,6 +140,7 @@ class TestMain(unittest.TestCase):
     def setUp(self):
         super(TestMain, self).setUp()
         self.argv = list(sys.argv)
+        configure_logger(logger, 'CRITICAL')
 
     def tearDown(self):
         super(TestMain, self).tearDown()
