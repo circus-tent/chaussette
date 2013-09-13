@@ -2,38 +2,22 @@
 """
 Tests for server.py
 """
-import signal
+import subprocess
 import sys
+import time
 try:
     import unittest2 as unittest
 except ImportError:
     import unittest
 
 import minimock
-from threading import Thread
 import requests
 import socket
 
 from chaussette.backend import backends
 import chaussette.server
-from chaussette.server import main
 from chaussette.util import configure_logger
 from chaussette import logger
-
-
-class ThreadedServer(Thread):
-
-    def __init__(self, backend):
-        Thread.__init__(self)
-        self.backend = backend
-
-    def run(self):
-        sys.argv[:] = ['chaussette', '--backend', self.backend,
-                       '--log-level', 'CRITICAL']
-        try:
-            main()
-        except Exception:
-            pass
 
 
 @unittest.skipIf(sys.version_info[0] == 3, "Not py3")
@@ -150,29 +134,32 @@ class TestMain(unittest.TestCase):
         super(TestMain, self).tearDown()
         sys.argv[:] = self.argv
 
-    def _test_main(self):
-        # NOT READY YET
-        #if sys.version_info[0] == 2:
-        #    from gevent import monkey
-        #    monkey.patch_all()
+    def _launch(self, backend):
+        cmd = '%s -m chaussette.server --backend %s'
+        cmd = cmd % (sys.executable, backend)
+        print(cmd)
+        proc = subprocess.Popen(cmd.split(),
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        time.sleep(.5)
+        return proc
 
+    def test_main(self):
         _backends = backends()
 
         def _handler(*args):
             try:
-                status = requests.get('http://localhost:8080').status_code
                 self.assertEqual(status, 200, '%s returned %d' %
                                  (backend, status))
             finally:
                 raise KeyboardInterrupt()
 
         for backend in _backends:
-            server = ThreadedServer(backend)
-            signal.signal(signal.SIGALRM, _handler)
-            signal.alarm(1)
+            server = self._launch(backend)
+            if backend in ('socketio', 'eventlet'):
+                continue
             try:
-                server.start()
-            except KeyboardInterrupt:
-                pass
-
-            server.join()
+                status = requests.get('http://localhost:8080').status_code
+                self.assertEqual(status, 200, backend)
+            finally:
+                server.terminate()
