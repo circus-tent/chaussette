@@ -20,10 +20,18 @@ except ImportError:
 with open('README.rst') as f:
     README = f.read()
 
-tests_require = ['nose', 'minimock', 'PasteDeploy', 'Paste']
+tests_require = ['greenlet==0.4.0',
+                 'nose', 'minimock', 'PasteDeploy', 'Paste',
+                 'waitress', 'meinheld']
+
 
 if sys.version_info[0] == 2:
     tests_require.append('unittest2')
+    tests_require.append('gevent')
+    tests_require.append('gevent-websocket')
+    tests_require.append('ws4py')
+    tests_require.append('eventlet')
+    tests_require.append('gevent-socketio')
 
 
 setup(name='chaussette',
