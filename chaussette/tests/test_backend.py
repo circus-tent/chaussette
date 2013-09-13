@@ -16,7 +16,7 @@ PY3 = ['meinheld', 'waitress', 'wsgiref']
 
 class TestBackend(unittest.TestCase):
 
-    def test_backends(self):
+    def _test_backends(self):
         _backends = backends()
         if sys.version_info[0] == 2:
             self.assertEqual(_backends, PY2)
