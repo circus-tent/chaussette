@@ -1,0 +1,9 @@
+*.pyc
+lib
+include
+bin
+*.un~
+*.egg-info
+.Python
+.tox
+build

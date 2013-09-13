@@ -9,8 +9,8 @@ from chaussette.util import import_string, configure_logger, LOG_LEVELS
 from chaussette.backend import get, backends
 
 
-def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048, spawn=None,
-                logger=None, address_family=socket.AF_INET,
+def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
+                spawn=None, logger=None, address_family=socket.AF_INET,
                 socket_type=socket.SOCK_STREAM):
     logger = logger or chaussette_logger
     logger.info('Application is %r' % app)
@@ -34,7 +34,9 @@ def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048, spaw
     try:
         server = server_class((host, port), app, **server_class_kwargs)
     except TypeError:
-        logger.exception("Failed to create backend %s, you might be trying to use --spawn on a backend that does not support it" % backend)
+        logger.exception("Failed to create backend %s, you might be trying "
+                         "to use --spawn on a backend that does "
+                         "not support it" % backend)
         raise
     return server
 
@@ -119,7 +121,9 @@ def main():
                         choices=backends())
     parser.add_argument('--use-reloader', action='store_true',
                         help="Restart server when source files change")
-    parser.add_argument('--spawn', type=int, default=None, help="Spawn type, only makes sense if the backend supports it (gevent)")
+    parser.add_argument('--spawn', type=int, default=None,
+                        help="Spawn type, only makes sense if the backend "
+                             "supports it (gevent)")
     parser.add_argument('application', default='chaussette.util.hello_app',
                         nargs='?')
     parser.add_argument('--pre-hook', type=str, default=None)
