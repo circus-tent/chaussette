@@ -12,8 +12,10 @@ class TestBackend(unittest.TestCase):
     def test_backends(self):
         _backends = backends()
 
-        PY2 = ['eventlet', 'fastgevent', 'gevent', 'geventwebsocket',
-               'meinheld', 'socketio', 'waitress', 'wsgiref']
+        PY2 = ['eventlet', 'fastgevent', 'gevent',
+               'geventwebsocket', 'geventws4py', 'meinheld',
+               'socketio', 'waitress',
+               'wsgiref']
         PY3 = ['meinheld', 'waitress', 'wsgiref']
 
         if sys.version_info[0] == 2:

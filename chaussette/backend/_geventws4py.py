@@ -1,14 +1,16 @@
-import socket
-from ws4py.server.geventserver import UpgradableWSGIHandler
+from ws4py.server.geventserver import (WebSocketWSGIHandler,
+                                       GEventWebSocketPool)
 from chaussette.backend._gevent import Server as GeventServer
 
 
-class CustomWSGIHandler(UpgradableWSGIHandler):
-    def __init__(self, sock, address, server, rfile=None):
-        if server.socket_type == socket.AF_UNIX:
-            address = ['0.0.0.0']
-        UpgradableWSGIHandler.__init__(self, sock, address, server, rfile)
-
-
 class Server(GeventServer):
-    handler_class = CustomWSGIHandler
+    handler_class = WebSocketWSGIHandler
+
+    def __init__(self, *args, **kwargs):
+        GeventServer.__init__(self, *args, **kwargs)
+        self.pool = GEventWebSocketPool()
+
+    def stop(self, *args, **kwargs):
+        self.pool.clear()
+        self.pool = None
+        GeventServer.stop(self, *args, **kwargs)
