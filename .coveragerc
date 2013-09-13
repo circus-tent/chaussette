@@ -1,0 +1,8 @@
+[run]
+omit = *_patch*,chaussette/tests/*
+source = chaussette
+include = chaussette/*
+
+[html]
+directory = html
+
