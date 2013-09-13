@@ -20,6 +20,11 @@ except ImportError:
 with open('README.rst') as f:
     README = f.read()
 
+tests_require = ['nose', 'minimock', 'PasteDeploy', 'Paste']
+
+if sys.version_info[0] == 2:
+    tests_require.append('unittest2')
+
 
 setup(name='chaussette',
       version=__version__,
@@ -39,7 +44,7 @@ setup(name='chaussette',
           "License :: OSI Approved :: Apache Software License",
           "Development Status :: 3 - Alpha"],
       install_requires=install_requires,
-      tests_require=['nose', 'minimock'],
+      tests_require=tests_require,
       test_suite='nose.collector',
       entry_points="""
       [console_scripts]

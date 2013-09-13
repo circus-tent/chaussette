@@ -4,7 +4,7 @@ Tests for server.py
 """
 import unittest
 import minimock
-from chaussette.backend import backends, get
+from chaussette.backend import backends
 import chaussette.server
 
 
@@ -42,9 +42,12 @@ class TestServer(unittest.TestCase):
             minimock.restore()
 
     def _check_make_server(self, backend):
-        mocked_backend = minimock.Mock('Backend', returns='backend_impl', tracker=self.tt)
-        minimock.mock('chaussette.server.get', returns=mocked_backend, tracker=self.tt)
-        server = chaussette.server.make_server('app', 'host', 'port', backend)
+        mocked_backend = minimock.Mock('Backend', returns='backend_impl',
+                                       tracker=self.tt)
+        minimock.mock('chaussette.server.get', returns=mocked_backend,
+                      tracker=self.tt)
+        server = chaussette.server.make_server('app', 'host', 'port',
+                                               backend)
         minimock.assert_same_trace(self.tt, '\n'.join([
             "Called chaussette.server.get('%s')" % backend,
             "Called Backend(",
@@ -61,15 +64,19 @@ class TestServer(unittest.TestCase):
         Check the spawn option for the backend that support it
         :return:
         """
-        for backend in ['gevent', 'fastgevent', 'geventwebsocket', 'socketio']:
+        for backend in ['gevent', 'fastgevent', 'geventwebsocket',
+                        'socketio']:
             self.tt = minimock.TraceTracker()
             self._check_make_server_spawn(backend)
             minimock.restore()
 
     def _check_make_server_spawn(self, backend):
-        mocked_backend = minimock.Mock('Backend', returns='backend_impl', tracker=self.tt)
-        minimock.mock('chaussette.server.get', returns=mocked_backend, tracker=self.tt)
-        server = chaussette.server.make_server('app', 'host', 'port', backend, spawn=5)
+        mocked_backend = minimock.Mock('Backend', returns='backend_impl',
+                                       tracker=self.tt)
+        minimock.mock('chaussette.server.get', returns=mocked_backend,
+                      tracker=self.tt)
+        server = chaussette.server.make_server('app', 'host', 'port',
+                                               backend, spawn=5)
         minimock.assert_same_trace(self.tt, '\n'.join([
             "Called chaussette.server.get('%s')" % backend,
             "Called Backend(",
@@ -87,4 +94,5 @@ class TestServer(unittest.TestCase):
         Check the spawn option for a backend that does not support it
         :return:
         """
-        self.assertRaises(TypeError, chaussette.server.make_server, 'app', 'host', 'port', spawn=5)
+        self.assertRaises(TypeError, chaussette.server.make_server, 'app',
+                          'host', 'port', spawn=5)
