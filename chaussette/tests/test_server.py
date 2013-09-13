@@ -2,10 +2,37 @@
 """
 Tests for server.py
 """
+import signal
+import sys
 import unittest
 import minimock
+from threading import Thread
+import requests
+import time
+import socket
+
 from chaussette.backend import backends
 import chaussette.server
+from chaussette.server import main
+
+
+class ThreadedServer(Thread):
+
+    def __init__(self, backend):
+        Thread.__init__(self)
+        self.backend = backend
+
+    def run(self):
+        def _handler(*args):
+            raise KeyboardInterrupt()
+
+        sys.argv[:] = ['chaussette', '--backend', self.backend]
+        signal.signal(signal.SIGALRM, _handler)
+        signal.alarm(1)
+        try:
+            main()
+        except Exception:
+            pass
 
 
 class TestServer(unittest.TestCase):
@@ -20,6 +47,8 @@ class TestServer(unittest.TestCase):
         """
         super(TestServer, self).setUp()
         self.tt = minimock.TraceTracker()
+        self.old = socket.socket.bind
+        socket.socket.bind = lambda x, y: None
 
     def tearDown(self):
         """
@@ -28,6 +57,7 @@ class TestServer(unittest.TestCase):
         """
         super(TestServer, self).tearDown()
         minimock.restore()
+        socket.socket.bind = self.old
 
     def test_make_server(self):
         """
@@ -96,3 +126,37 @@ class TestServer(unittest.TestCase):
         """
         self.assertRaises(TypeError, chaussette.server.make_server, 'app',
                           'host', 'port', spawn=5)
+
+
+class TestMain(unittest.TestCase):
+    """
+    Test server.py
+    """
+
+    def setUp(self):
+        super(TestMain, self).setUp()
+        self.argv = list(sys.argv)
+
+    def tearDown(self):
+        super(TestMain, self).tearDown()
+        sys.argv[:] = self.argv
+
+    def test_main(self):
+
+        if sys.version_info[0] == 2:
+            from gevent import monkey
+            monkey.patch_all()
+
+        _backends = backends()
+
+        for backend in _backends:
+            server = ThreadedServer(backend)
+            status = -1
+            try:
+                server.start()
+                time.sleep(.5)
+                status = requests.get('http://localhost:8080').status_code
+            except KeyboardInterrupt:
+                pass
+
+            self.assertEqual(status, 200)

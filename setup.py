@@ -22,7 +22,7 @@ with open('README.rst') as f:
 
 tests_require = ['greenlet==0.4.0',
                  'nose', 'minimock', 'PasteDeploy', 'Paste',
-                 'waitress', 'meinheld']
+                 'waitress', 'meinheld', 'requests']
 
 
 if sys.version_info[0] == 2:

@@ -259,8 +259,10 @@ def create_socket(host, port, family=socket.AF_INET, type=socket.SOCK_STREAM,
         # just recreate the socket
         fd = int(host.split('://')[1])
         sock = socket.fromfd(fd, family, type)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     else:
         sock = socket.socket(family, type)
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         if host.startswith('unix:'):
             filename = host[len('unix:'):]
             try:
