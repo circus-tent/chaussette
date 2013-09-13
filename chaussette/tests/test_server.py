@@ -23,12 +23,7 @@ class ThreadedServer(Thread):
         self.backend = backend
 
     def run(self):
-        def _handler(*args):
-            raise KeyboardInterrupt()
-
         sys.argv[:] = ['chaussette', '--backend', self.backend]
-        signal.signal(signal.SIGALRM, _handler)
-        signal.alarm(1)
         try:
             main()
         except Exception:
@@ -47,8 +42,11 @@ class TestServer(unittest.TestCase):
         """
         super(TestServer, self).setUp()
         self.tt = minimock.TraceTracker()
-        self.old = socket.socket.bind
-        socket.socket.bind = lambda x, y: None
+        try:
+            self.old = socket.socket.bind
+            socket.socket.bind = lambda x, y: None
+        except AttributeError:
+            self.old = None
 
     def tearDown(self):
         """
@@ -57,7 +55,8 @@ class TestServer(unittest.TestCase):
         """
         super(TestServer, self).tearDown()
         minimock.restore()
-        socket.socket.bind = self.old
+        if self.old is not None:
+            socket.socket.bind = self.old
 
     def test_make_server(self):
         """
@@ -148,10 +147,16 @@ class TestMain(unittest.TestCase):
             monkey.patch_all()
 
         _backends = backends()
+        def _handler(*args):
+            raise KeyboardInterrupt()
+
 
         for backend in _backends:
             server = ThreadedServer(backend)
             status = -1
+            signal.signal(signal.SIGALRM, _handler)
+            signal.alarm(1)
+
             try:
                 server.start()
                 time.sleep(.5)
