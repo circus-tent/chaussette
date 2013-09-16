@@ -5,7 +5,8 @@ python:
     - "3.3"
 install:
     - python setup.py develop
-script: make test
+    - pip install tox
+script: tox
 notifications:
     email: tarek@mozilla.com
     irc: "irc.freenode.org#mozilla-circus"
