@@ -7,7 +7,6 @@ import os
 import sys
 
 from tempfile import mkstemp
-from chaussette._paste import paste_app
 
 
 INI = """\
@@ -38,6 +37,7 @@ class TestPasteApp(unittest.TestCase):
         return path
 
     def test_app(self):
+        from chaussette._paste import paste_app
         path = self._get_file()
 
         with open(path, 'w') as f:
