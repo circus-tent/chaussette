@@ -129,19 +129,24 @@ class TestMain(unittest.TestCase):
         super(TestMain, self).setUp()
         self.argv = list(sys.argv)
         configure_logger(logger, 'CRITICAL')
+        self.procs = []
 
     def tearDown(self):
         super(TestMain, self).tearDown()
         sys.argv[:] = self.argv
+        for proc in self.procs:
+            proc.stdout.close()
+            proc.stderr.close()
+            proc.terminate()
 
     def _launch(self, backend):
         cmd = '%s -m chaussette.server --backend %s'
         cmd = cmd % (sys.executable, backend)
-        print(cmd)
         proc = subprocess.Popen(cmd.split(),
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         time.sleep(.5)
+        self.procs.append(proc)
         return proc
 
     def test_main(self):
@@ -159,7 +164,9 @@ class TestMain(unittest.TestCase):
             if backend in ('socketio', 'eventlet'):
                 continue
             try:
-                status = requests.get('http://localhost:8080').status_code
+                resp = requests.get('http://localhost:8080')
+                status = resp.status_code
                 self.assertEqual(status, 200, backend)
             finally:
+                resp.connection.close()
                 server.terminate()
