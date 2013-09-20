@@ -4,6 +4,13 @@ from chaussette.backend import _wsgiref
 
 _backends = {'wsgiref': _wsgiref.ChaussetteServer}
 
+try:
+    from chaussette.backend import _waitress
+    _backends['waitress'] = _waitress.Server
+except ImportError:
+    pass
+
+
 PY3 = sys.version_info[0] == 3
 
 if not PY3:
@@ -25,12 +32,6 @@ if not PY3:
     try:
         from chaussette.backend import _geventws4py
         _backends['geventws4py'] = _geventws4py.Server
-    except ImportError:
-        pass
-
-    try:
-        from chaussette.backend import _waitress
-        _backends['waitress'] = _waitress.Server
     except ImportError:
         pass
 
