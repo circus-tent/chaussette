@@ -9,3 +9,6 @@ bin
 build
 html
 .coverage
+*.egg
+*.swp
+man
