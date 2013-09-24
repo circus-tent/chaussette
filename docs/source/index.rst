@@ -68,6 +68,7 @@ Here's an example:
 
 .. _`Django documentation`: https://docs.djangoproject.com/en/1.4/howto/deployment/wsgi/
 
+
 Running a Python Paste application
 ----------------------------------
 
@@ -126,13 +127,15 @@ Chaussette is just a bit of glue code on the top of existing WSGI servers,
 and is organized around **back ends**.
 
 By default Chaussette uses a pure Python implementation based on **wsgiref**,
-but it also provides more efficient back ends:
+but it also provides more efficient back ends. Most of them are for Python 2
+only, but Chaussette can be used under Python 3 with a few of them - marked in the
+list below:
 
 - **gevent** -- based on Gevent's *pywsgi* server
 - **fastgevent** -- based on Gevent's *wsgi* server -- faster but does not
   support streaming.
 - **meinheld** -- based on Meinheld's fast C server
-- **waitress** -- based on Pyramid's waitress pure Python web server
+- **waitress** -- based on Pyramid's waitress pure Python web server (py3)
 - **eventlet** -- based on Eventlet's wsgi server
 - **geventwebsocket** -- Gevent's **pywsgi** server coupled with
   **geventwebsocket** handler.
@@ -158,6 +161,7 @@ are installed:
 
 
 If you want to add your favorite WSGI Server as a backend to Chaussette,
+or if you think you can make one of the backend Python 3 compatible,
 send me an e-mail !
 
 If you curious about how each on of those backends performs, you can read:
