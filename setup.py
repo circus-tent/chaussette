@@ -21,7 +21,7 @@ with open('README.rst') as f:
     README = f.read()
 
 
-tests_require = ['nose', 'waitress', 'requests', 'minimock']
+tests_require = ['nose', 'waitress', 'requests', 'minimock', 'coverage']
 
 if sys.version_info[0] == 2:
     tests_require.extend(['greenlet==0.4.0', 'PasteDeploy', 'Paste',

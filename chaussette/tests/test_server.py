@@ -145,7 +145,7 @@ class TestMain(unittest.TestCase):
         proc = subprocess.Popen(cmd.split(),
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
-        time.sleep(.5)
+        time.sleep(.8)
         self.procs.append(proc)
         return proc
 
