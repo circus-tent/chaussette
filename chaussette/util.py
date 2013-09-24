@@ -247,7 +247,7 @@ def bench_app(environ, start_response):
     return result
 
 
-def create_socket(host, port, family=socket.AF_INET, type=socket.SOCK_STREAM,
+def create_socket(host, port=0, family=socket.AF_INET, type=socket.SOCK_STREAM,
                   backlog=2048, blocking=True):
     if family == socket.AF_UNIX and not host.startswith('unix:'):
         raise ValueError('Your host needs to have the unix:/path form')
