@@ -11,12 +11,12 @@ PY2 = ['eventlet', 'fastgevent', 'gevent',
        'geventwebsocket', 'geventws4py', 'meinheld',
        'socketio', 'waitress',
        'wsgiref']
-PY3 = ['meinheld', 'waitress', 'wsgiref']
+PY3 = ['waitress', 'wsgiref']
 
 
 class TestBackend(unittest.TestCase):
 
-    def _test_backends(self):
+    def test_backends(self):
         _backends = backends()
         if sys.version_info[0] == 2:
             self.assertEqual(_backends, PY2)
