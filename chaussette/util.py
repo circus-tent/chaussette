@@ -102,7 +102,7 @@ def import_string(import_name, silent=False):
     :return: imported object
     """
     # force the import name to automatically convert to strings
-    if not six.PY3 and isinstance(import_name, unicode):
+    if not six.PY3 and isinstance(import_name, unicode):      # NOQA
         import_name = import_name.encode('utf-8')
     try:
         if ':' in import_name:
@@ -113,7 +113,7 @@ def import_string(import_name, silent=False):
             return __import__(import_name)
             # __import__ is not able to handle unicode strings in the fromlist
         # if the module is a package
-        if not six.PY3 and isinstance(obj, unicode):
+        if not six.PY3 and isinstance(obj, unicode):        # NOQA
             obj = obj.encode('utf-8')
         try:
             return getattr(__import__(module, None, None, [obj]), obj)
