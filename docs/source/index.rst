@@ -13,11 +13,11 @@ on a port like any other server does **or** run against **already opened
 sockets**.
 
 That makes **Chaussette** the best companion to run a WSGI or Django
-stack in `Circus <http://circus.io>`_.
+stack in `Circus <http://circus.rtfd.org>`_.
 
 .. image:: https://secure.travis-ci.org/mozilla-services/chaussette.png?branch=master
    :alt: Build Status
-   :target: https://secure.travis-ci.org/mozilla-services/chaussette
+   :target: https://secure.travis-ci.org/mozilla-services/chaussette/
 .. image:: https://coveralls.io/repos/mozilla-services/chaussette/badge.png?branch=master
    :alt: Coverage Status on master
    :target: https://coveralls.io/r/mozilla-services/chaussette?branch=master
