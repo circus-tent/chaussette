@@ -21,6 +21,5 @@ class Server(WSGIServer):
                                     self.socket_type, backlog=backlog)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server_address = self.socket.getsockname()
-        log = None
         super(Server, self).__init__(self.socket, application, None, spawn,
                                      log, handler_class, environ, **ssl_args)
