@@ -13,7 +13,8 @@ on a port like any other server does **or** run against **already opened
 sockets**.
 
 That makes **Chaussette** the best companion to run a WSGI or Django
-stack in `Circus <http://circus.rtfd.org>`_.
+stack under a process and socket manager, such as
+`Circus <http://circus.rtfd.org>`_ or `Supervisor <http://supervisord.org>`_.
 
 .. image:: https://secure.travis-ci.org/mozilla-services/chaussette.png?branch=master
    :alt: Build Status
@@ -91,8 +92,9 @@ Here's an example:
 Using Chaussette in Circus
 ==========================
 
-The typical use case is to run Chaussette processes in `Circus <http://circus.io>`_,
-which takes care of binding the sockets and spawning Chaussette processes.
+The typical use case is to run Chaussette processes under a process and socket
+manager.  Chaussette was developed to run under `Circus <http://circus.io>`_,
+which takes care of binding the socket and spawning Chaussette processes.
 
 To run your WSGI application using Circus, define a *socket* section in your
 configuration file, then add a Chaussette watcher.
@@ -118,6 +120,50 @@ Minimal example:
 
 When Circus runs, it binds a socket on the *8000* port and passes the file descriptor
 value to the Chaussette process, by replacing *${socket:web}* by the file number value.
+
+
+Using Chaussette in Supervisor
+==============================
+
+`Supervisor <http://supervisord.org>`_ includes a socket manager since
+version 3.0a7, released in 2009.  It was originally developed to support
+FastCGI processes and thus the configuration section is called
+*fcgi-program*.  Despite the name, it is not tied to the FastCGI protocol.
+Supervisor can bind the socket and then spawn Chaussette processes.
+
+To run your WSGI application using Supervisor, define an *fcgi-program*
+section in your configuration file.
+
+Minimal example:
+
+.. code-block:: ini
+
+    [supervisord]
+    logfile = /tmp/supervisord.log
+
+    [inet_http_server]
+    port = 127.0.0.1:9001
+
+    [supervisorctl]
+    serverurl = http://127.0.0.1:9001
+
+    [rpcinterface:supervisor]
+    supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+    [fcgi-program:web]
+    command = chaussette --fd 0 --backend meinheld server.app
+    process_name = %(program_name)s_%(process_num)s
+    numprocs = 5
+    socket = tcp://0.0.0.0:8000
+
+
+Notice the ``--fd 0`` argument to ``chaussette``.  Each *fcgi-program*
+section defines its own socket and the file descriptor is always ``0``.
+See the `Supervisor manual <http://supervisord.org/configuration.html#fcgi-program-x-section-settings>`_
+for detailed information.
+
+Supervisor will create the socket before spawning the first Chaussette child
+process.  When the last child exits, Supervisor will close the socket.
 
 
 Backends
@@ -178,14 +224,14 @@ applications, like multi-threading or multi-processing. Depending on the
 project, the *process management* features, like respawning processes that
 die, or adding new ones on the fly, are not always very advanced.
 
-On the other hand, Circus provides very advanced features to manage
-your processes, and is able to manage sockets as well.
+On the other hand, tools like Circus and Supervisor have more advanced
+features to manage your processes, and are able to manage sockets as well.
 
 The goal of *Chaussette* is to delegate process and socket management to
-Circus and just focus on serving requests.
+its parent process and just focus on serving requests.
 
-Using a pre-fork model, Circus binds sockets and forks Chaussette processes
-that are able to accept connections on those sockets, as child processes.
+Using a pre-fork model, the process manager binds a socket.  It then forks
+Chaussette child processes that accept connections on that socket.
 
 For more information about this design, read :
 
