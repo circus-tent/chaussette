@@ -6,7 +6,7 @@ from chaussette.util import create_socket
 
 class CustomWSGIHandler(WSGIHandler):
     def __init__(self, sock, address, server, rfile=None):
-        if server.socket_type == socket.AF_UNIX:
+        if server.address_family == socket.AF_UNIX:
             address = ['0.0.0.0']
         WSGIHandler.__init__(self, sock, address, server, rfile)
 
@@ -19,10 +19,15 @@ class Server(WSGIServer):
 
     def __init__(self, listener, application=None, backlog=None,
                  spawn='default', log='default', handler_class=None,
-                 environ=None, socket_type=socket.SOCK_STREAM,
-                 address_family=socket.AF_INET, **ssl_args):
-        self.address_family = address_family
-        self.socket_type = socket_type
+                 environ=None, socket_type=None,
+                 address_family=None, **ssl_args):
+        if address_family:
+            self.address_family = address_family
+        if socket_type:
+            self.socket_type = socket_type
+        if handler_class:
+            self.handler_class = handler_class
+
         monkey.noisy = False
         monkey.patch_all()
         host, port = listener
@@ -31,4 +36,5 @@ class Server(WSGIServer):
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server_address = self.socket.getsockname()
         super(Server, self).__init__(self.socket, application, None, spawn,
-                                     log, handler_class, environ, **ssl_args)
+                                     log, self.handler_class, environ,
+                                     **ssl_args)
