@@ -18,3 +18,6 @@ docs: bin/python
 	$(BIN)/pip install sphinx
 	$(BIN)/sphinx-build -b html -d docs/build/doctrees docs/source build/html
 
+upload: bin/python
+	$(BIN)/pip install wheel
+	$(BIN)/python setup.py sdist --formats=zip,gztar bdist_wheel upload
