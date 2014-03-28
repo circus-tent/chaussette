@@ -11,6 +11,8 @@ except ImportError:
 
 def paste_app(path):
     # Load the logging config from paste.deploy .ini, if any
+    path, hsh, app = path.partition('#')
+
     parser = configparser.ConfigParser()
     parser.read([path])
     if parser.has_section('loggers'):
@@ -20,4 +22,4 @@ def paste_app(path):
             dict(__file__=config_file, here=os.path.dirname(config_file))
         )
 
-    return loadapp('config:%s' % os.path.abspath(path))
+    return loadapp('config:%s%s%s' % (os.path.abspath(path), hsh, app))
