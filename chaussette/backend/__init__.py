@@ -10,6 +10,12 @@ try:
 except ImportError:
     pass
 
+try:
+    from chaussette.backend import _meinheld
+    _backends['meinheld'] = _meinheld.Server
+except ImportError:
+    pass
+
 
 PY3 = sys.version_info[0] == 3
 
@@ -38,12 +44,6 @@ if not PY3:
     try:
         from chaussette.backend import _eventlet
         _backends['eventlet'] = _eventlet.Server
-    except ImportError:
-        pass
-
-    try:
-        from chaussette.backend import _meinheld
-        _backends['meinheld'] = _meinheld.Server
     except ImportError:
         pass
 

@@ -21,11 +21,11 @@ with open('README.rst') as f:
     README = f.read()
 
 
-tests_require = ['nose', 'waitress', 'requests', 'minimock', 'coverage']
+tests_require = ['nose', 'waitress', 'meinheld', 'requests', 'minimock', 'coverage']
 
 if sys.version_info[0] == 2:
     tests_require.extend(['greenlet==0.4.0', 'PasteDeploy', 'Paste',
-                          'meinheld', 'unittest2', 'gevent',
+                          'unittest2', 'gevent',
                           'gevent-websocket', 'ws4py', 'eventlet',
                           'gevent-socketio'])
 

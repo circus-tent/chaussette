@@ -11,7 +11,7 @@ PY2 = ['eventlet', 'fastgevent', 'gevent',
        'geventwebsocket', 'geventws4py', 'meinheld',
        'socketio', 'waitress',
        'wsgiref']
-PY3 = ['waitress', 'wsgiref']
+PY3 = ['meinheld', 'waitress', 'wsgiref']
 
 
 class TestBackend(unittest.TestCase):
