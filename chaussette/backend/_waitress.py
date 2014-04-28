@@ -20,7 +20,7 @@ class Server(WSGIServer):
                                      port=port)
 
     def create_socket(self, family, type):
-        #Ignore parameters passed by waitress to use chaussette options
+        # Ignore parameters passed by waitress to use chaussette options
         family, type = self._chaussette_family_and_type
 
         self.family_and_type = family, type
