@@ -236,7 +236,7 @@ Chaussette child processes that accept connections on that socket.
 For more information about this design, read :
 
 - http://blog.ziade.org/2012/06/12/shared-sockets-in-circus.
-- http://circus.readthedocs.org/en/latest/sockets/
+- http://circus.readthedocs.org/en/latest/for-ops/sockets/
 
 
 Useful links
