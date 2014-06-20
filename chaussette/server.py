@@ -126,6 +126,8 @@ def main():
                              "supports it (gevent)")
     parser.add_argument('application', default='chaussette.util.hello_app',
                         nargs='?')
+    parser.add_argument('arguments', default=[], nargs='*'
+                        help="Optional arguments you may need for your app")
     parser.add_argument('--pre-hook', type=str, default=None)
     parser.add_argument('--post-hook', type=str, default=None)
     parser.add_argument('--python-path', type=str, default=None)
