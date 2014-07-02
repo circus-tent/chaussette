@@ -1,4 +1,3 @@
-import os
 import socket
 import tornado.httpserver
 import tornado.ioloop
@@ -26,11 +25,12 @@ class Server(object):
             sock.setblocking(0)
             socks = [sock]
         elif self.address_family == socket.AF_UNIX:
-            filename = er[0][len('unix:'):]
+            filename = host[len('unix:'):]
             sock = tornado.netutil.bind_unix_socket(filename, backlog=backlog)
             socks = [sock]
         else:
-            socks = tornado.netutil.bind_sockets(port, host, address_family, backlog)
+            socks = tornado.netutil.bind_sockets(
+                port, host, address_family, backlog)
         self._server.add_sockets(socks)
         self.application = application
 
