@@ -9,9 +9,9 @@ from chaussette.backend import backends
 
 PY2 = ['eventlet', 'fastgevent', 'gevent',
        'geventwebsocket', 'geventws4py', 'meinheld',
-       'socketio', 'waitress',
+       'socketio', 'tornado', 'waitress',
        'wsgiref']
-PY3 = ['meinheld', 'waitress', 'wsgiref']
+PY3 = ['meinheld', 'tornado', 'waitress', 'wsgiref']
 
 
 class TestBackend(unittest.TestCase):

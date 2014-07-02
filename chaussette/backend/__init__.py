@@ -16,6 +16,12 @@ try:
 except ImportError:
     pass
 
+try:
+    from chaussette.backend import _tornado
+    _backends['tornado'] = _tornado.Server
+except ImportError:
+    pass
+
 
 PY3 = sys.version_info[0] == 3
 
