@@ -27,10 +27,6 @@ class Server(object):
             socks = [sock]
         elif self.address_family == socket.AF_UNIX:
             filename = er[0][len('unix:'):]
-            try:
-                os.remove(filename)
-            except OSError:
-                pass
             sock = tornado.netutil.bind_unix_socket(filename, backlog=backlog)
             socks = [sock]
         else:
