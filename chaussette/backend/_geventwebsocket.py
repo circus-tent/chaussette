@@ -1,6 +1,9 @@
+from gevent import monkey
+monkey.noisy = False
+monkey.patch_all()
+
 import socket
 from gevent.pywsgi import WSGIServer
-from gevent import monkey
 from geventwebsocket.handler import WebSocketHandler
 from chaussette.util import create_socket
 
@@ -16,8 +19,7 @@ class Server(WSGIServer):
                  address_family=socket.AF_INET, **ssl_args):
         self.address_family = address_family
         self.socket_type = socket_type
-        monkey.noisy = False
-        monkey.patch_all()
+
         host, port = listener
         self.handler_class = WebSocketHandler
         self.socket = create_socket(host, port, self.address_family,

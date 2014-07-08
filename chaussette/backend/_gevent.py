@@ -1,6 +1,9 @@
+from gevent import monkey
+monkey.noisy = False
+monkey.patch_all()
+
 import socket
 from gevent.pywsgi import WSGIServer, WSGIHandler
-from gevent import monkey
 from chaussette.util import create_socket
 
 
@@ -28,8 +31,6 @@ class Server(WSGIServer):
         if handler_class:
             self.handler_class = handler_class
 
-        monkey.noisy = False
-        monkey.patch_all()
         host, port = listener
         self.socket = create_socket(host, port, self.address_family,
                                     self.socket_type, backlog=backlog)
