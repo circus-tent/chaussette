@@ -154,6 +154,7 @@ class TestMain(unittest.TestCase):
                 raise KeyboardInterrupt()
 
         for backend in _backends:
+            resp = None
             server = self._launch(backend)
             try:
                 if backend in ('socketio', 'eventlet'):
@@ -162,5 +163,6 @@ class TestMain(unittest.TestCase):
                 status = resp.status_code
                 self.assertEqual(status, 200, backend)
             finally:
-                resp.connection.close()
                 server.terminate()
+                if resp is not None:
+                    resp.connection.close()
