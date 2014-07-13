@@ -1,10 +1,11 @@
 import socket
-import tornado.httpserver
 import tornado.ioloop
 import tornado.netutil
-import tornado.web
 import tornado.wsgi
 from tornado.platform.auto import set_close_exec
+from tornado.web import Application
+from tornado.tcpserver import TCPServer
+from tornado.httpserver import HTTPServer
 
 
 class Server(object):
@@ -15,8 +16,15 @@ class Server(object):
         self.socket_type = socket_type
         host, port = listener
 
-        tapp = tornado.wsgi.WSGIContainer(application)
-        self._server = tornado.httpserver.HTTPServer(tapp)
+        if isinstance(application, Application):
+            self._server = HTTPServer(application)
+        elif isinstance(application, TCPServer):
+            self._server = tornado.application
+        elif callable(application):
+            tapp = tornado.wsgi.WSGIContainer(application)
+            self._server = HTTPServer(tapp)
+        else:
+            raise TypeError("Unsupported application type: %r" % (application,))
 
         if host.startswith('fd://'):
             fd = int(host.split('://')[1])
