@@ -19,7 +19,7 @@ class Server(object):
         if isinstance(application, Application):
             self._server = HTTPServer(application)
         elif isinstance(application, TCPServer):
-            self._server = tornado.application
+            self._server = application
         elif callable(application):
             tapp = tornado.wsgi.WSGIContainer(application)
             self._server = HTTPServer(tapp)
