@@ -24,7 +24,8 @@ class Server(object):
             tapp = tornado.wsgi.WSGIContainer(application)
             self._server = HTTPServer(tapp)
         else:
-            raise TypeError("Unsupported application type: %r" % (application,))
+            raise TypeError(
+                "Unsupported application type: %r" % (application,))
 
         if host.startswith('fd://'):
             fd = int(host.split('://')[1])
