@@ -139,7 +139,14 @@ class TestMain(unittest.TestCase):
         cmd = cmd % (sys.executable, backend)
         print(cmd)
         proc = subprocess.Popen(cmd.split())
-        time.sleep(.8)
+        for _ in range(10):
+            time.sleep(0.2)
+            try:
+                s = socket.create_connection(('localhost', 8080), 1)
+                s.close()
+                break
+            except socket.error:
+                continue
         return proc
 
     def test_main(self):
