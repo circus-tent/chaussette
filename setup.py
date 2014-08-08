@@ -9,6 +9,8 @@ if (not hasattr(sys, 'version_info')
             and sys.version_info < (3, 3, 0, 'final'))):
     raise SystemExit("Chaussette requires Python 2.6, 2.7, 3.3 or later.")
 
+PYPY = hasattr(sys, 'pypy_version_info')
+
 install_requires = ['six >= 1.3.0']
 
 try:
@@ -21,13 +23,17 @@ with open('README.rst') as f:
     README = f.read()
 
 
-tests_require = ['nose', 'waitress', 'meinheld', 'requests', 'minimock', 'coverage']
+tests_require = ['nose', 'waitress', 'tornado',
+                 'requests', 'minimock']
+
+if not PYPY:
+    tests_require += ['meinheld', 'greenlet']
 
 if sys.version_info[0] == 2:
-    tests_require.extend(['greenlet==0.4.0', 'PasteDeploy', 'Paste',
-                          'unittest2', 'gevent',
-                          'gevent-websocket', 'ws4py', 'eventlet',
-                          'gevent-socketio'])
+    tests_require += ['PasteDeploy', 'Paste', 'unittest2', 'ws4py']
+    if not PYPY:
+        tests_require += ['gevent', 'gevent-websocket', 'eventlet',
+                          'gevent-socketio']
 
 
 setup(name='chaussette',
@@ -42,9 +48,12 @@ setup(name='chaussette',
       zip_safe=False,
       classifiers=[
           "Programming Language :: Python",
+          "Programming Language :: Python :: 2",
           "Programming Language :: Python :: 2.6",
           "Programming Language :: Python :: 2.7",
+          "Programming Language :: Python :: 3",
           "Programming Language :: Python :: 3.3",
+          "Programming Language :: Python :: 3.4",
           "License :: OSI Approved :: Apache Software License",
           "Development Status :: 3 - Alpha"],
       install_requires=install_requires,

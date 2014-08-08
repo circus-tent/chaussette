@@ -1,6 +1,4 @@
 from gevent import monkey
-monkey.noisy = False
-monkey.patch_all()
 
 import socket
 from gevent.wsgi import WSGIServer
@@ -17,6 +15,8 @@ class Server(WSGIServer):
                  spawn='default', log='default', handler_class=None,
                  environ=None, socket_type=socket.SOCK_STREAM,
                  address_family=socket.AF_INET, **ssl_args):
+        monkey.noisy = False
+        monkey.patch_all()
         host, port = listener
         self.socket = create_socket(host, port, self.address_family,
                                     self.socket_type, backlog=backlog)

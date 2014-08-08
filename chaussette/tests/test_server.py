@@ -129,44 +129,40 @@ class TestMain(unittest.TestCase):
         super(TestMain, self).setUp()
         self.argv = list(sys.argv)
         configure_logger(logger, 'CRITICAL')
-        self.procs = []
 
     def tearDown(self):
         super(TestMain, self).tearDown()
         sys.argv[:] = self.argv
-        for proc in self.procs:
-            proc.stdout.close()
-            proc.stderr.close()
-            proc.terminate()
 
     def _launch(self, backend):
         cmd = '%s -m chaussette.server --backend %s'
         cmd = cmd % (sys.executable, backend)
-        proc = subprocess.Popen(cmd.split(),
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        time.sleep(.8)
-        self.procs.append(proc)
+        print(cmd)
+        proc = subprocess.Popen(cmd.split())
+        for _ in range(10):
+            time.sleep(0.2)
+            try:
+                s = socket.create_connection(('localhost', 8080), 1)
+                s.close()
+                break
+            except socket.error:
+                continue
         return proc
 
     def test_main(self):
-        _backends = backends()
-
-        def _handler(*args):
-            try:
-                self.assertEqual(status, 200, '%s returned %d' %
-                                 (backend, status))
-            finally:
-                raise KeyboardInterrupt()
-
-        for backend in _backends:
+        for backend in backends():
+            resp = None
             server = self._launch(backend)
-            if backend in ('socketio', 'eventlet'):
-                continue
             try:
+                # socketio is not a WSGI Server.
+                # So we check only it can be started.
+                if backend == 'socketio':
+                    continue
                 resp = requests.get('http://localhost:8080')
                 status = resp.status_code
                 self.assertEqual(status, 200, backend)
+                self.assertEqual(resp.text, u"hello world")
             finally:
-                resp.connection.close()
                 server.terminate()
+                if resp is not None:
+                    resp.connection.close()
