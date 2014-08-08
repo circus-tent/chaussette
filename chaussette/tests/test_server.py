@@ -137,9 +137,7 @@ class TestMain(unittest.TestCase):
     def _launch(self, backend):
         cmd = '%s -m chaussette.server --backend %s'
         cmd = cmd % (sys.executable, backend)
-        proc = subprocess.Popen(cmd.split(),
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
+        proc = subprocess.Popen(cmd.split())
         time.sleep(.8)
         return proc
 
