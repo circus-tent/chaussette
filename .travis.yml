@@ -13,5 +13,5 @@ notifications:
     on_success: change
 after_success:
   # Report coverage results to coveralls.io
-  - pip install coveralls
+  - pip install coveralls coverage
   - coveralls
