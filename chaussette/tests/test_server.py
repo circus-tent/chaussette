@@ -137,29 +137,24 @@ class TestMain(unittest.TestCase):
     def _launch(self, backend):
         cmd = '%s -m chaussette.server --backend %s'
         cmd = cmd % (sys.executable, backend)
+        print(cmd)
         proc = subprocess.Popen(cmd.split())
         time.sleep(.8)
         return proc
 
     def test_main(self):
-        _backends = backends()
-
-        def _handler(*args):
-            try:
-                self.assertEqual(status, 200, '%s returned %d' %
-                                 (backend, status))
-            finally:
-                raise KeyboardInterrupt()
-
-        for backend in _backends:
+        for backend in backends():
             resp = None
             server = self._launch(backend)
             try:
-                if backend in ('socketio', 'eventlet'):
+                # socketio is not a WSGI Server.
+                # So we check only it can be started.
+                if backend == 'socketio':
                     continue
                 resp = requests.get('http://localhost:8080')
                 status = resp.status_code
                 self.assertEqual(status, 200, backend)
+                self.assertEqual(resp.text, u"hello world")
             finally:
                 server.terminate()
                 if resp is not None:
