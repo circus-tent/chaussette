@@ -24,7 +24,7 @@ with open('README.rst') as f:
 
 
 tests_require = ['nose', 'waitress', 'tornado',
-                 'requests', 'minimock', 'coverage']
+                 'requests', 'minimock']
 
 if not PYPY:
     tests_require += ['meinheld', 'greenlet']
