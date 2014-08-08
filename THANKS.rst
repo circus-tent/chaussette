@@ -10,3 +10,4 @@ Here's a list of other contributors:
 - Pedro Romano
 - Victor Fernandez de Alba
 - Gilles Devaux
+- INADA Naoki
