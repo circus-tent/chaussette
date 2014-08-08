@@ -23,6 +23,13 @@ except ImportError:
     pass
 
 
+try:
+    from chaussette.backend import __bjoern
+    _backends['bjoern'] = __bjoern.Server
+except ImportError:
+    pass
+
+
 PY3 = sys.version_info[0] == 3
 
 if not PY3:
