@@ -189,6 +189,7 @@ list below:
   **ws4py** handler.
 - **socketio** -- based on gevent-socketio, which is a custom
   Gevent server & handler that manages the socketio protocol.
+- **bjoern** -- based on Bjoern.
 
 
 You can select your backend by using the **--backend** option and providing
@@ -204,6 +205,7 @@ are installed:
 - **geventwebsocket**: `pip install gevent-websocket`
 - **geventws4py**: `pip install ws4py`
 - **socketio**: `pip install gevent-socketio`
+- **bjoern**: `pip install bjoern`
 
 
 If you want to add your favorite WSGI Server as a backend to Chaussette,
