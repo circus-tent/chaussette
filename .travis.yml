@@ -2,7 +2,7 @@ language: python
 python:
     - "2.7"
 before_install:
-    - sudo apt-get install -y libevent-dev
+    - sudo apt-get install -y libevent-dev libev libev-devel
 install:
     - python setup.py develop
     - pip install tox
