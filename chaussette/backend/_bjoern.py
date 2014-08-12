@@ -1,6 +1,6 @@
 import socket
 from chaussette.util import create_socket
-import _bjoern
+import bjoern
 
 
 class Server(object):
@@ -13,4 +13,4 @@ class Server(object):
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     def serve_forever(self):
-        _bjoern.server_run(self.sock, self.app)
+        bjoern.server_run(self.sock, self.app)
