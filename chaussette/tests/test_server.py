@@ -18,6 +18,7 @@ from chaussette.backend import backends
 import chaussette.server
 from chaussette.util import configure_logger
 from chaussette import logger
+from chaussette.tests.support import hush
 
 
 @unittest.skipIf(sys.version_info[0] == 3, "Not py3")
@@ -138,7 +139,8 @@ class TestMain(unittest.TestCase):
         cmd = '%s -m chaussette.server --backend %s'
         cmd = cmd % (sys.executable, backend)
         print(cmd)
-        proc = subprocess.Popen(cmd.split())
+        proc = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         for _ in range(10):
             time.sleep(0.2)
             try:
@@ -149,6 +151,7 @@ class TestMain(unittest.TestCase):
                 continue
         return proc
 
+    @hush
     def test_main(self):
         for backend in backends():
             resp = None
