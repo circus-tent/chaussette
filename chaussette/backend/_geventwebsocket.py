@@ -1,5 +1,3 @@
-from gevent import monkey
-
 import socket
 from gevent.pywsgi import WSGIServer
 from geventwebsocket.handler import WebSocketHandler
@@ -15,8 +13,6 @@ class Server(WSGIServer):
                  spawn='default', log='default', handler_class=None,
                  environ=None, socket_type=socket.SOCK_STREAM,
                  address_family=socket.AF_INET, **ssl_args):
-        monkey.noisy = False
-        monkey.patch_all()
         self.address_family = address_family
         self.socket_type = socket_type
 

@@ -76,3 +76,8 @@ def get(name):
 
 def backends():
     return sorted(_backends.keys())
+
+
+def is_gevent_backend(backend):
+    return backend in ('gevent', 'fastgevent', 'geventwebsocket',
+                       'geventws4py')
