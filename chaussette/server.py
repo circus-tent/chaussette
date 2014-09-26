@@ -11,7 +11,8 @@ from chaussette.backend import get, backends
 
 def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
                 spawn=None, logger=None, address_family=socket.AF_INET,
-                socket_type=socket.SOCK_STREAM):
+                socket_type=socket.SOCK_STREAM, graceful_timeout=None):
+
     logger = logger or chaussette_logger
     logger.info('Application is %r' % app)
     if host.startswith('fd://') or host.startswith('unix:'):
@@ -30,6 +31,8 @@ def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
     }
     if spawn is not None:
         server_class_kwargs['spawn'] = spawn
+    if graceful_timeout is not None:
+        server_class_kwargs['graceful_timeout'] = graceful_timeout
 
     try:
         server = server_class((host, port), app, **server_class_kwargs)
@@ -56,6 +59,8 @@ _SOCKET_TYPE = {
 }
 
 _NO_UNIX = ('waitress', 'fastgevent', 'eventlet')
+
+_SUPPORTS_GRACEFUL_TIMEOUT = ('gevent', 'fastgevent', 'geventwebsocket')
 
 
 def serve_paste(app, global_conf, **kw):
@@ -124,6 +129,10 @@ def main():
     parser.add_argument('--spawn', type=int, default=None,
                         help="Spawn type, only makes sense if the backend "
                              "supports it (gevent)")
+    parser.add_argument('--graceful-timeout', type=int, default=None,
+                        help="Graceful shutdown timeout for existing requests "
+                             "to complete, only for backends that support it "
+                             "(%s)" % ', '.join(_SUPPORTS_GRACEFUL_TIMEOUT))
     parser.add_argument('application', default='chaussette.util.hello_app',
                         nargs='?')
     parser.add_argument('arguments', default=[], nargs='*',
@@ -145,6 +154,12 @@ def main():
 
     logger = chaussette_logger
     configure_logger(logger, args.loglevel, args.logoutput)
+
+    if args.graceful_timeout is not None and \
+            args.backend not in _SUPPORTS_GRACEFUL_TIMEOUT:
+        logger.info('Sorry %r does not support --graceful_timeout' %
+                    args.backend)
+        sys.exit(0)
 
     if application.startswith('paste:'):
         from chaussette._paste import paste_app
@@ -179,6 +194,7 @@ def main():
             httpd = make_server(app, host=host, port=args.port,
                                 backend=args.backend, backlog=args.backlog,
                                 spawn=args.spawn,
+                                graceful_timeout=args.graceful_timeout,
                                 logger=logger,
                                 address_family=address_family,
                                 socket_type=_SOCKET_TYPE[args.socket_type])
