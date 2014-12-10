@@ -11,3 +11,4 @@ Here's a list of other contributors:
 - Victor Fernandez de Alba
 - Gilles Devaux
 - INADA Naoki
+- Devon Meunier

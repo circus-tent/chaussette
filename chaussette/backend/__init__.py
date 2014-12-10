@@ -22,6 +22,12 @@ try:
 except ImportError:
     pass
 
+try:
+    from chaussette.backend import _cherrypy
+    _backends['cherrypy'] = _cherrypy.Server
+except ImportError:
+    pass
+
 
 PY3 = sys.version_info[0] == 3
 

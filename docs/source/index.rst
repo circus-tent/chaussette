@@ -191,6 +191,7 @@ list below:
   Gevent server & handler that manages the socketio protocol.
 - **bjoern** -- based on Bjoern.
 - **tornado** -- based on Tornado's wsgi server.
+- **cherrypy** -- based on CherryPy's wsgi server.
 
 
 You can select your backend by using the **--backend** option and providing
@@ -208,6 +209,7 @@ are installed:
 - **socketio**: `pip install gevent-socketio`
 - **bjoern**: `pip install bjoern`
 - **tornado**: `pip install tornado`
+- **cherrypy**: `pip install cherrypy`
 
 
 If you want to add your favorite WSGI Server as a backend to Chaussette,

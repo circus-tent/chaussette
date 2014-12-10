@@ -8,12 +8,12 @@ from chaussette.backend import backends
 
 IS_PYPY = hasattr(sys, 'pypy_version_info')
 
-PY2 = ['bjoern', 'eventlet', 'fastgevent', 'gevent',
+PY2 = ['bjoern', 'cherrypy', 'eventlet', 'fastgevent', 'gevent',
        'geventwebsocket', 'geventws4py', 'meinheld',
        'socketio', 'tornado', 'waitress',
        'wsgiref']
 PYPY = ['tornado', 'waitress', 'wsgiref']
-PY3 = ['meinheld', 'tornado', 'waitress', 'wsgiref']
+PY3 = ['cherrypy', 'meinheld', 'tornado', 'waitress', 'wsgiref']
 
 
 class TestBackend(unittest.TestCase):
