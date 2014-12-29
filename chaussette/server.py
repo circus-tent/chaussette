@@ -3,6 +3,7 @@ import os
 import argparse
 import itertools
 import socket
+import logging
 
 from chaussette import logger as chaussette_logger
 from chaussette.util import import_string, configure_logger, LOG_LEVELS
@@ -150,6 +151,10 @@ def main():
 
     logger = chaussette_logger
     configure_logger(logger, args.loglevel, args.logoutput)
+
+    # Propagate log config to backend
+    backend_logger = logging.getLogger(args.backend)
+    configure_logger(backend_logger, args.loglevel, args.logoutput)
 
     if application.startswith('paste:'):
         from chaussette._paste import paste_app

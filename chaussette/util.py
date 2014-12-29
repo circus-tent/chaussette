@@ -30,16 +30,29 @@ def close_on_exec(fd):
 
 
 def configure_logger(logger, level='INFO', output="-"):
+    class InfoFilter(logging.Filter):
+        def filter(self, record):
+            return record.levelname in ['INFO', 'DEBUG']
+
+    fmt = logging.Formatter(LOG_FMT, LOG_DATE_FMT)
     loglevel = LOG_LEVELS.get(level.lower(), logging.INFO)
+    logger.propagate = False
     logger.setLevel(loglevel)
     if output == "-":
-        h = logging.StreamHandler()
+        # Log info and debug to stdout and the rest to stderr
+        hout = logging.StreamHandler(stream=sys.stdout)
+        hout.setLevel(logging.DEBUG)
+        hout.addFilter(InfoFilter())
+        hout.setFormatter(fmt)
+        herr = logging.StreamHandler(stream=sys.stderr)
+        herr.setLevel(logging.WARNING)
+        herr.setFormatter(fmt)
+        logger.handlers = [herr, hout]
     else:
         h = logging.FileHandler(output)
         close_on_exec(h.stream.fileno())
-    fmt = logging.Formatter(LOG_FMT, LOG_DATE_FMT)
-    h.setFormatter(fmt)
-    logger.handlers = [h]
+        h.setFormatter(fmt)
+        logger.handlers = [h]
 
 
 class ImportStringError(ImportError):
