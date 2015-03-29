@@ -23,6 +23,13 @@ except ImportError:
     pass
 
 
+try:
+    from chaussette.backend import _asyncio3k
+    _backends['asyncio3k'] = _asyncio3k.Server
+except ImportError as e:
+    print(e)
+
+
 PY3 = sys.version_info[0] == 3
 
 if not PY3:
@@ -49,7 +56,7 @@ if not PY3:
 
     try:
         from chaussette.backend import _eventlet
-        _backends['eventlet'] = _eventlet.Server
+        _backends['eventlet'] = _eventlet.d
     except ImportError:
         pass
 
