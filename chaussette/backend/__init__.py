@@ -56,7 +56,7 @@ if not PY3:
 
     try:
         from chaussette.backend import _eventlet
-        _backends['eventlet'] = _eventlet.d
+        _backends['eventlet'] = _eventlet.Server
     except ImportError:
         pass
 
