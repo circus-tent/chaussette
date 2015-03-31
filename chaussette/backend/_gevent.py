@@ -1,6 +1,8 @@
 import socket
 from gevent.pywsgi import WSGIServer, WSGIHandler
 from chaussette.util import create_socket
+import signal
+from gevent import signal as gevent_signal
 
 
 class CustomWSGIHandler(WSGIHandler):
@@ -18,8 +20,8 @@ class Server(WSGIServer):
 
     def __init__(self, listener, application=None, backlog=None,
                  spawn='default', log='default', handler_class=None,
-                 environ=None, socket_type=None,
-                 address_family=None, **ssl_args):
+                 environ=None, socket_type=None, address_family=None,
+                 graceful_timeout=None, **ssl_args):
         if address_family:
             self.address_family = address_family
         if socket_type:
@@ -32,6 +34,11 @@ class Server(WSGIServer):
                                     self.socket_type, backlog=backlog)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server_address = self.socket.getsockname()
+
+        if graceful_timeout is not None:
+            self.stop_timeout = graceful_timeout
+            gevent_signal(signal.SIGTERM, self.stop)
+
         super(Server, self).__init__(self.socket, application, None, spawn,
                                      log, self.handler_class, environ,
                                      **ssl_args)
