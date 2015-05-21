@@ -1,0 +1,56 @@
+Source: chaussette
+Maintainer: David Douard <david.douard@logilab.fr>
+Section: python
+Priority: optional
+Homepage: https://chaussette.readthedocs.org
+Vcs-Hg: http://hg.logilab.org/master/debian/chaussette
+Build-Depends: 
+  python-setuptools (>= 0.6b3), 
+  python-all (>= 2.6.6-3), 
+  python-six (>= 1.3),
+  python-paste,
+  python-pastedeploy,
+  python-nose,
+  python-socketio,
+  python-ws4py,
+  python-waitress,
+  python-tornado,
+  python-requests,
+  python-minimock,
+  python-greenlet,
+  python-eventlet,
+  python-gevent-websocket,
+  python-unittest2,
+  dh-python,
+  debhelper (>= 9),
+Standards-Version: 3.9.6
+X-Python-Version: >= 2.7
+
+Package: chaussette
+Architecture: all
+Depends: 
+  python-six (>= 1.3),
+  python-paste,
+  python-pastedeploy,
+  ${misc:Depends}, 
+  ${python:Depends},
+Suggests:
+  python-nose,
+  python-socketio,
+  python-ws4py,
+  python-waitress,
+  python-tornado,
+  python-requests,
+  python-minimock,
+  python-greenlet,
+  python-eventlet,
+  python-gevent-websocket,
+  python-werkzeug,
+Description: WSGI Server for Circus
+ Chaussette is a WSGI server you can use to run your Python WSGI applications.
+ .
+ The particularity of Chaussette is that it can either bind a socket on a port 
+ like any other server does or run against already opened sockets.
+ .
+ That makes Chaussette the best companion to run a WSGI or Django stack under 
+ a process and socket manager, such as Circus or Supervisor.

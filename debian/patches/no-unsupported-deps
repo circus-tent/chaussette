@@ -1,0 +1,38 @@
+From: David Douard <david.douard@logilab.fr>
+Subject: remove support for meinheld
+
+Since it's not available in debian.
+
+Index: chaussette-1.2/chaussette/tests/test_backend.py
+===================================================================
+--- chaussette-1.2.orig/chaussette/tests/test_backend.py
++++ chaussette-1.2/chaussette/tests/test_backend.py
+@@ -8,12 +8,12 @@ from chaussette.backend import backends
+ 
+ IS_PYPY = hasattr(sys, 'pypy_version_info')
+ 
+-PY2 = ['bjoern', 'eventlet', 'fastgevent', 'gevent',
+-       'geventwebsocket', 'geventws4py', 'meinheld',
++PY2 = ['eventlet', 'fastgevent', 'gevent',
++       'geventwebsocket', 'geventws4py',
+        'socketio', 'tornado', 'waitress',
+        'wsgiref']
+ PYPY = ['tornado', 'waitress', 'wsgiref']
+-PY3 = ['meinheld', 'tornado', 'waitress', 'wsgiref']
++PY3 = ['tornado', 'waitress', 'wsgiref']
+ 
+ 
+ class TestBackend(unittest.TestCase):
+Index: chaussette-1.2/setup.py
+===================================================================
+--- chaussette-1.2.orig/setup.py
++++ chaussette-1.2/setup.py
+@@ -27,7 +27,7 @@ tests_require = ['nose', 'waitress', 'to
+                  'requests', 'minimock']
+ 
+ if not PYPY:
+-    tests_require += ['meinheld', 'greenlet']
++    tests_require += ['greenlet']
+ 
+ if sys.version_info[0] == 2:
+     tests_require += ['PasteDeploy', 'Paste', 'unittest2', 'ws4py']

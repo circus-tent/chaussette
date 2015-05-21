@@ -1,0 +1,5 @@
+chaussette (1.3.0-1) unstable; urgency=low
+  
+  * initial packaging (closes: #784654)
+
+ -- David Douard <david.douard@logilab.fr>  Wed, 06 May 2015 14:45:22 +0200

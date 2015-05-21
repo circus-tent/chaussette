@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+
+export PYBUILD_NAME=chaussette
+%:
+	dh $@ --with python2 --buildsystem=pybuild
+
+# pybuild sets the http_proxy environment variable to prevent 'python setup.py'
+# from downloading stuff from pypi, but this breaks the tests that perform 
+# some GET queries, so we unset it to run tests 
+override_dh_auto_test:
+	http_proxy="" dh_auto_test
