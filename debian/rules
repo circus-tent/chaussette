@@ -1,6 +1,8 @@
 #!/usr/bin/make -f
 
 export PYBUILD_NAME=chaussette
+export PYBUILD_AFTER_INSTALL=rm -rf '{destdir}/{install_dir}/examples'
+
 %:
 	dh $@ --with python2 --buildsystem=pybuild
 
