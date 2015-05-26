@@ -1,6 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: chaussette
 Source: https://pypi.python.org/pypi/chaussette
+Files-Excluded: examples/simple_chat/
 
 Files: *
 Copyright: 2012-2015 Mozilla Foundation
@@ -26,4 +27,5 @@ License: Apache-2.0
  On Debian systems, the full text of the Apache License, Version 2.0 can be
  found in the file
  `/usr/share/common-licenses/Apache-2.0'.
+
 
