@@ -9,3 +9,8 @@ export PYBUILD_NAME=chaussette
 # some GET queries, so we unset it to run tests 
 override_dh_auto_test:
 	http_proxy="" dh_auto_test
+
+override_dh_installman:
+	make -C docs man
+	dh_installman
+

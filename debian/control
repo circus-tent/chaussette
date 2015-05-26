@@ -21,6 +21,7 @@ Build-Depends:
   python-eventlet,
   python-gevent-websocket,
   python-unittest2,
+  python-sphinx,
   dh-python,
   debhelper (>= 9),
 Standards-Version: 3.9.6
