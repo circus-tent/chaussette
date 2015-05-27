@@ -16,16 +16,12 @@ That makes **Chaussette** the best companion to run a WSGI or Django
 stack under a process and socket manager, such as
 `Circus <http://circus.rtfd.org>`_ or `Supervisor <http://supervisord.org>`_.
 
-.. image:: https://secure.travis-ci.org/mozilla-services/chaussette.png?branch=master
+.. image:: https://secure.travis-ci.org/circus-tent/chaussette.png?branch=master
    :alt: Build Status
-   :target: https://secure.travis-ci.org/mozilla-services/chaussette/
-.. image:: https://coveralls.io/repos/mozilla-services/chaussette/badge.png?branch=master
+   :target: https://secure.travis-ci.org/circus-tent/chaussette/
+.. image:: https://coveralls.io/repos/circus-tent/chaussette/badge.png?branch=master
    :alt: Coverage Status on master
-   :target: https://coveralls.io/r/mozilla-services/chaussette?branch=master
-.. image:: https://pypip.in/v/chaussette/badge.png
-   :target: https://crate.io/packages/chaussette/
-.. image:: https://pypip.in/d/chaussette/badge.png
-   :target: https://crate.io/packages/chaussette/
+   :target: https://coveralls.io/r/circus-tent/chaussette?branch=master
 
 
 
@@ -92,9 +88,10 @@ Here's an example:
 Using Chaussette in Circus
 ==========================
 
-The typical use case is to run Chaussette processes under a process and socket
-manager.  Chaussette was developed to run under `Circus <http://circus.io>`_,
-which takes care of binding the socket and spawning Chaussette processes.
+The typical use case is to run Chaussette processes under a process
+and socket manager.  Chaussette was developed to run under `Circus
+<http://circus.readthedocs.org>`_, which takes care of binding the
+socket and spawning Chaussette processes.
 
 To run your WSGI application using Circus, define a *socket* section in your
 configuration file, then add a Chaussette watcher.
@@ -246,5 +243,7 @@ For more information about this design, read :
 Useful links
 ============
 
-- Repository : https://github.com/mozilla-services/chaussette
-
+- Repository : https://github.com/circus-tent/chaussette
+- Documentation : https://chaussette.readthedocs.org
+- Continuous Integration: https://travis-ci.org/circus-tent/chaussette
+    
