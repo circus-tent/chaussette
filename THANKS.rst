@@ -1,4 +1,5 @@
-Chaussette was created and is maintained by Tarek Ziade.
+Chaussette was created by Tarek Ziade. 
+It is maintained by Tarek Ziade and David Douard.
 
 Here's a list of other contributors:
 
