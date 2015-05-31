@@ -6,6 +6,7 @@ from tornado.platform.auto import set_close_exec
 from tornado.web import Application
 from tornado.tcpserver import TCPServer
 from tornado.httpserver import HTTPServer
+from tornado.wsgi import WSGIApplication
 
 
 class Server(object):
@@ -16,7 +17,8 @@ class Server(object):
         self.socket_type = socket_type
         host, port = listener
 
-        if isinstance(application, Application):
+        if (isinstance(application, Application) and
+            not isinstance(application, WSGIApplication)):
             self._server = HTTPServer(application)
         elif isinstance(application, TCPServer):
             self._server = application
