@@ -67,3 +67,18 @@ Links
 .. _Django: https://docs.djangoproject.com
 .. _flask: http://flask.pocoo.org/
 
+
+Changelog
+---------
+
+1.3.0 - 2015-06-01
+~~~~~~~~~~~~~~~~~~
+
+- Fix gevent monkey patching (pull request #67).
+- Add a "--graceful-timeout" option (for gevent-based backends).
+- Fix the tornado backend so that it accepts tornado's WSGIApplication
+  instaces.
+- Update documentation.
+- Improve example applications.
+
+
