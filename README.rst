@@ -20,36 +20,49 @@ under a process and socket manager, such as Circus_.
 Quick Start
 -----------
 
+Running:
+
+.. code-block:: bash
+
+   chaussette
+
+starts a very simple HTTP sample server on port 8080.  
+
+
 Starting a WSGI application using chaussette is simply a matter of calling:
 
 .. code-block:: bash
 
-   cd examples/tornado_app
-   chaussette --port 8080 --host 127.0.01 --backend tornado tornadoapp.helloapp
+   chaussette examples.tornadoapp.wsgiapp
 
-In this example, we start a standalone WSGi server, but the spirit of
-chaussette is to be managed by Circus_, as described
-http://chaussette.readthedocs.org/en/latest/#using-chaussette-in-circus
+Chaussette can also serve tornado (non WSGI) application:
+
+.. code-block:: bash
+
+   chaussette --backend tornado examples.tornadoapp.tornadoapp
 
 The `simple_chat` example can be started as:
 
 .. code-block:: bash
 
-   cd examples/simple_chat
-   chaussette --port 8080 --host 127.0.01 --backend socketio chat.app
+   chaussette --backend socketio examples.simple_chat.chat.app
 
-Note that these two examples are not backend agnostic, since they are
-not pure WSGI applications.
+Note that the two previous examples are not backend agnostic, since
+they are not (pure) WSGI applications.
 
 A flask_ based pure WSGI application can be started with most
 backends:
 
 .. code-block:: bash
 
-   cd examples/flask
-   chaussette --port 8080 --host 127.0.01 --backend gevent  hello.app
+   chaussette --backend gevent examples.flaskapp.app
 
 
+In these examples, we start a standalone WSGI server, but the spirit of
+chaussette is to be managed by Circus_, as described
+http://chaussette.readthedocs.org/en/latest/#using-chaussette-in-circus
+
+   
 Links
 -----
 
