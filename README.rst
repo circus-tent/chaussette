@@ -16,12 +16,6 @@ under a process and socket manager, such as Circus_.
    :alt: Coverage Status on master
    :target: https://coveralls.io/r/circus-tent/chaussette?branch=master
 
-.. image:: https://pypip.in/v/chaussette/badge.png
-   :target: https://crate.io/packages/chaussette/
-
-.. image:: https://pypip.in/d/chaussette/badge.png
-   :target: https://crate.io/packages/chaussette/
-
 
 Quick Start
 -----------
