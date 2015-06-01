@@ -33,7 +33,7 @@ if sys.version_info[0] == 2:
     tests_require += ['PasteDeploy', 'Paste', 'unittest2', 'ws4py']
     if not PYPY:
         tests_require += ['gevent', 'gevent-websocket', 'eventlet',
-                          'gevent-socketio']
+                          'gevent-socketio', 'bjoern']
 
 
 setup(name='chaussette',
