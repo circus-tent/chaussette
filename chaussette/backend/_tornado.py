@@ -17,8 +17,8 @@ class Server(object):
         self.socket_type = socket_type
         host, port = listener
 
-        if (isinstance(application, Application) and
-            not isinstance(application, WSGIApplication)):
+        if (isinstance(application, Application) and not
+                isinstance(application, WSGIApplication)):
             self._server = HTTPServer(application)
         elif isinstance(application, TCPServer):
             self._server = application
