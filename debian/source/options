@@ -1,1 +1,1 @@
-extend-diff-ignore="^examples/simple_chat/"
+extend-diff-ignore="^.tox"
