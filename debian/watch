@@ -1,2 +1,3 @@
 version=3
-http://pypi.debian.net/chaussette/chaussette-(.+)\.(?:zip|tgz|tbz|txz|(?:tar\.(?:gz|bz2|xz)))
+opts=filenamemangle=s/.+\/v?(\d\S*)\.tar\.gz/<project>-$1\.tar\.gz/ \
+  https://github.com/circus-tent/chaussette/tags .*/v?(\d\S*)\.tar\.gz

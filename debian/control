@@ -3,7 +3,8 @@ Maintainer: David Douard <david.douard@logilab.fr>
 Section: python
 Priority: optional
 Homepage: https://chaussette.readthedocs.org
-Vcs-Hg: http://hg.logilab.org/master/debian/chaussette
+Vcs-Git: git://github.com/circus-tent/chaussette.git -b debian
+Vcs-Browser: https://github.com/circus-tent/chaussette
 Build-Depends: 
   python-setuptools (>= 0.6b3), 
   python-all (>= 2.6.6-3), 
