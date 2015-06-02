@@ -12,9 +12,18 @@ under a process and socket manager, such as Circus_.
    :alt: Build Status
    :target: https://secure.travis-ci.org/circus-tent/chaussette/
 
-.. image:: https://coveralls.io/repos/circus-tent/chaussette/badge.png?branch=master
+.. image:: https://coveralls.io/repos/circus-tent/chaussette/badge.svg?branch=master
    :alt: Coverage Status on master
    :target: https://coveralls.io/r/circus-tent/chaussette?branch=master
+
+.. image:: https://img.shields.io/pypi/v/chaussette.svg
+   :target: https://python.org/pypi/chaussette/
+
+.. image:: https://img.shields.io/pypi/dm/chaussette.svg
+   :target: https://python.org/pypi/chaussette/
+
+.. image:: http://allmychanges.com/p/python/chaussette/badge/
+   :target: http://allmychanges.com/p/python/chaussette/?utm_source=badge
 
 
 Quick Start
