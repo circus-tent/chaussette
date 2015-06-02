@@ -1,12 +1,12 @@
-From: David Douard <david.douard@logilab.fr>
-Subject: remove support for meinheld
+Description: remove meinheld and bjoern dependencies
+ since they are not available as a debian package yet
+Author: David Douard <david.douard@logilab.fr>
+Bug-Debian: https://bugs.debian.org/784654
 
-Since it's not available in debian.
-
-Index: chaussette-1.2/chaussette/tests/test_backend.py
+Index: chaussette/chaussette/tests/test_backend.py
 ===================================================================
---- chaussette-1.2.orig/chaussette/tests/test_backend.py
-+++ chaussette-1.2/chaussette/tests/test_backend.py
+--- chaussette.orig/chaussette/tests/test_backend.py
++++ chaussette/chaussette/tests/test_backend.py
 @@ -8,12 +8,12 @@ from chaussette.backend import backends
  
  IS_PYPY = hasattr(sys, 'pypy_version_info')
@@ -23,11 +23,11 @@ Index: chaussette-1.2/chaussette/tests/test_backend.py
  
  
  class TestBackend(unittest.TestCase):
-Index: chaussette-1.2/setup.py
+Index: chaussette/setup.py
 ===================================================================
---- chaussette-1.2.orig/setup.py
-+++ chaussette-1.2/setup.py
-@@ -27,7 +27,7 @@ tests_require = ['nose', 'waitress', 'to
+--- chaussette.orig/setup.py
++++ chaussette/setup.py
+@@ -30,13 +30,13 @@ tests_require = ['nose', 'waitress', 'to
                   'requests', 'minimock']
  
  if not PYPY:
@@ -36,3 +36,10 @@ Index: chaussette-1.2/setup.py
  
  if sys.version_info[0] == 2:
      tests_require += ['PasteDeploy', 'Paste', 'unittest2', 'ws4py']
+     if not PYPY:
+         tests_require += ['gevent', 'gevent-websocket', 'eventlet',
+-                          'gevent-socketio', 'bjoern']
++                          'gevent-socketio']
+ 
+ setup(name='chaussette',
+       version=__version__,
