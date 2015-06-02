@@ -15,3 +15,9 @@ after_success:
   # Report coverage results to coveralls.io
   - pip install coveralls coverage
   - coveralls
+deploy:
+  provider: pypi
+  user: "FOO"
+  password: "BAR"
+  on:
+    tags: true
