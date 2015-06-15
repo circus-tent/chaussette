@@ -31,6 +31,5 @@ class Server(object):
                            loop=self.loop,
                            port=self.port,
                            host=self.host,
-                           **dict(socket=self.socket,
-                                  backlog=self.backlog))
-        print("Serving")
+                           socket=self.socket,
+                           backlog=self.backlog)
