@@ -166,6 +166,10 @@ def main():
                     args.backend)
         sys.exit(0)
 
+    # make the arg parser available from the loaded wsgi module via
+    # the sys module, so it can more easily retrieve the 'arguments'
+    # given on chaussette cmd line
+    sys.argp = args
     if application.startswith('paste:'):
         from chaussette._paste import paste_app
         app = paste_app(application.split(':')[-1])
