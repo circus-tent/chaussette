@@ -42,6 +42,7 @@ You can run a plain WSGI application, a Django application, or a Paste applicati
 To get all options, just run *chaussette --help*.
 
 
+
 Running a plain WSGI application
 --------------------------------
 
@@ -55,6 +56,13 @@ application, like any WSGI server out there:
     Serving on localhost:8080
     Using <class chaussette.backend._wsgiref.ChaussetteServer at 0x104e58d50> as a backend
 
+
+.. Note::
+   the main `ArgumentParser <https://docs.python.org/2/library/argparse.html>`_ 
+   instance used to parse *chaussette* command
+   line arguments and options is made available in the context of the wsgi app
+   as a `sys.argp` variable, so one can easily use the extra (non-chaussette 
+   specific) arguments given on the command line.
 
 Running a Django application
 ----------------------------
