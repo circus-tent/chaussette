@@ -11,7 +11,8 @@ from chaussette.backend import get, backends, is_gevent_backend
 
 def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
                 spawn=None, logger=None, address_family=socket.AF_INET,
-                socket_type=socket.SOCK_STREAM, graceful_timeout=None):
+                socket_type=socket.SOCK_STREAM, graceful_timeout=None,
+                disable_monkeypatch=False):
 
     logger = logger or chaussette_logger
     logger.info('Application is %r' % app)
@@ -28,6 +29,7 @@ def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
         'backlog': backlog,
         'address_family': address_family,
         'socket_type': socket_type,
+        'disable_monkeypatch' : disable_monkeypatch
     }
     if spawn is not None:
         server_class_kwargs['spawn'] = spawn
@@ -126,6 +128,10 @@ def main():
                         choices=backends())
     parser.add_argument('--use-reloader', action='store_true',
                         help="Restart server when source files change")
+
+    parser.add_argument('--no-monkey', action='store_true',
+                        help="Disable monkey patching from backend")
+
     parser.add_argument('--spawn', type=int, default=None,
                         help="Spawn type, only makes sense if the backend "
                              "supports it (gevent)")
@@ -150,7 +156,7 @@ def main():
                         help="log output")
     args = parser.parse_args()
 
-    if is_gevent_backend(args.backend):
+    if is_gevent_backend(args.backend) and not args.no_monkey:
         from gevent import monkey
         monkey.noisy = False
         monkey.patch_all()
@@ -202,7 +208,8 @@ def main():
                                 graceful_timeout=args.graceful_timeout,
                                 logger=logger,
                                 address_family=address_family,
-                                socket_type=_SOCKET_TYPE[args.socket_type])
+                                socket_type=_SOCKET_TYPE[args.socket_type],
+                                disable_monkeypatch=args.no_monkey)
             try:
                 httpd.serve_forever()
             except KeyboardInterrupt:

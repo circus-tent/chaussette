@@ -6,11 +6,13 @@ from meinheld import server
 class Server(object):
     def __init__(self, listener, application=None, backlog=2048,
                  socket_type=socket.SOCK_STREAM,
-                 address_family=socket.AF_INET):
+                 address_family=socket.AF_INET,
+                 disable_monkeypatch=False):
         self.address_family = address_family
         self.socket_type = socket_type
-        from meinheld import patch
-        patch.patch_all()
+        if not disable_monkeypatch:
+            from meinheld import patch
+            patch.patch_all()
         server.set_backlog(backlog)
         host, port = listener
         if host.startswith('fd://'):
