@@ -40,7 +40,7 @@ if sys.version_info[0] == 2:
 
 setup(name='chaussette',
       version=__version__,
-      url='http://chaussette.readthedocs.org',
+      url='https://chaussette.readthedocs.io',
       packages=find_packages(exclude=['examples', 'examples.simple_chat']),
       description=("A WSGI Server for Circus"),
       long_description=README,
