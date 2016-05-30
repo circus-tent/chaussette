@@ -100,7 +100,7 @@ Using Chaussette in Circus
 
 The typical use case is to run Chaussette processes under a process
 and socket manager.  Chaussette was developed to run under `Circus
-<http://circus.readthedocs.org>`_, which takes care of binding the
+<https://circus.readthedocs.io>`_, which takes care of binding the
 socket and spawning Chaussette processes.
 
 To run your WSGI application using Circus, define a *socket* section in your
@@ -247,13 +247,13 @@ Chaussette child processes that accept connections on that socket.
 For more information about this design, read :
 
 - http://blog.ziade.org/2012/06/12/shared-sockets-in-circus.
-- http://circus.readthedocs.org/en/latest/for-ops/sockets/
+- https://circus.readthedocs.io/en/latest/for-ops/sockets/
 
 
 Useful links
 ============
 
 - Repository : https://github.com/circus-tent/chaussette
-- Documentation : https://chaussette.readthedocs.org
+- Documentation : https://chaussette.readthedocs.io
 - Continuous Integration: https://travis-ci.org/circus-tent/chaussette
     

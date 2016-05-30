@@ -69,17 +69,17 @@ backends:
 
 In these examples, we start a standalone WSGI server, but the spirit of
 chaussette is to be managed by Circus_, as described
-http://chaussette.readthedocs.org/en/latest/#using-chaussette-in-circus
+https://chaussette.readthedocs.io/en/latest/#using-chaussette-in-circus
 
    
 Links
 -----
 
-- The full documentation is located at: http://chaussette.readthedocs.org
+- The full documentation is located at: https://chaussette.readthedocs.io
 - You can reach us for any feedback, bug report, or to contribute, at
   https://github.com/circus-tent/chaussette
 
-.. _Circus: http://circus.readthedocs.org
+.. _Circus: https://circus.readthedocs.io
 .. _Django: https://docs.djangoproject.com
 .. _flask: http://flask.pocoo.org/
 
