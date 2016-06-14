@@ -150,6 +150,8 @@ def main():
                         help="log output")
     args = parser.parse_args()
 
+    sys.path.append(args.python_path)
+
     if is_gevent_backend(args.backend):
         from gevent import monkey
         monkey.noisy = False
