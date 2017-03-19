@@ -1,5 +1,6 @@
 import socket
 from waitress.server import WSGIServer
+import waitress.compat
 
 
 class Server(WSGIServer):
@@ -16,8 +17,14 @@ class Server(WSGIServer):
             self._fd = None
 
         self._chaussette_family_and_type = address_family, socket_type
-        super(Server, self).__init__(application, backlog=backlog, host=host,
-                                     port=port)
+        # check if waitress has IPv6 support (waitress >= 1.0)
+        if hasattr(waitress.compat, 'HAS_IPV6'):
+            ipv6 = address_family == socket.AF_INET6
+            super(Server, self).__init__(application, backlog=backlog,
+                                         host=host, port=port, ipv6=ipv6)
+        else:
+            super(Server, self).__init__(application, backlog=backlog,
+                                         host=host, port=port)
 
     def create_socket(self, family, type):
         # Ignore parameters passed by waitress to use chaussette options
