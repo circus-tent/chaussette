@@ -5,7 +5,7 @@ import bjoern
 
 class Server(object):
     def __init__(self, listener, application=None, backlog=None,
-                 socket_type=None, address_family=None):
+                 socket_type=None, address_family=None, **kw):
         host, port = listener
         self.app = application
         self.sock = create_socket(host, port, address_family,

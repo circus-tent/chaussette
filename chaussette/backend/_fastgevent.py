@@ -15,7 +15,7 @@ class Server(WSGIServer):
                  spawn='default', log='default', handler_class=None,
                  environ=None, socket_type=socket.SOCK_STREAM,
                  address_family=socket.AF_INET, graceful_timeout=None,
-                 **ssl_args):
+                 disable_monkeypatch=False, **ssl_args):
         host, port = listener
         self.socket = create_socket(host, port, self.address_family,
                                     self.socket_type, backlog=backlog)

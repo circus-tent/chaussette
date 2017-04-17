@@ -78,6 +78,7 @@ class TestServer(unittest.TestCase):
             "   'app',",
             "   address_family=2,",
             "   backlog=2048,",
+            "   disable_monkeypatch=False,",
             "socket_type=1)"
         ]))
         self.assertEqual(server, 'backend_impl')
@@ -107,6 +108,7 @@ class TestServer(unittest.TestCase):
             "   'app',",
             "   address_family=2,",
             "   backlog=2048,",
+            "   disable_monkeypatch=False,",
             "   socket_type=1,",
             "   spawn=5)"
         ]))
@@ -149,19 +151,22 @@ class TestMain(unittest.TestCase):
                 break
             except socket.error:
                 continue
-        return proc
+        return proc, cmd
 
     @hush
     def test_main(self):
         for backend in backends():
             resp = None
-            server = self._launch(backend)
+            server, cmd = self._launch(backend)
             try:
                 # socketio is not a WSGI Server.
                 # So we check only it can be started.
                 if backend == 'socketio':
                     continue
-                resp = requests.get('http://localhost:8080')
+                try:
+                    resp = requests.get('http://localhost:8080')
+                except Exception as e:
+                    raise Exception(cmd)
                 status = resp.status_code
                 self.assertEqual(status, 200, backend)
                 self.assertEqual(resp.text, u"hello world")

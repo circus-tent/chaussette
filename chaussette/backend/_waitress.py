@@ -9,7 +9,7 @@ class Server(WSGIServer):
 
     def __init__(self, listener, application=None, backlog=2048,
                  socket_type=socket.SOCK_STREAM,
-                 address_family=socket.AF_INET):
+                 address_family=socket.AF_INET, **kw):
         host, port = listener
         if host.startswith('fd://'):
             self._fd = int(host.split('://')[1])
