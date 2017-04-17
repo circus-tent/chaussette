@@ -21,7 +21,8 @@ class Server(WSGIServer):
     def __init__(self, listener, application=None, backlog=None,
                  spawn='default', log='default', handler_class=None,
                  environ=None, socket_type=None, address_family=None,
-                 graceful_timeout=None, **ssl_args):
+                 graceful_timeout=None, disable_monkeypatch=False,
+                 **ssl_args):
         if address_family:
             self.address_family = address_family
         if socket_type:

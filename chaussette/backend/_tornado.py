@@ -12,7 +12,7 @@ from tornado.wsgi import WSGIApplication
 class Server(object):
     def __init__(self, listener, application=None, backlog=2048,
                  socket_type=socket.SOCK_STREAM,
-                 address_family=socket.AF_INET):
+                 address_family=socket.AF_INET, **kw):
         self.address_family = address_family
         self.socket_type = socket_type
         host, port = listener
