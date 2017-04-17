@@ -157,7 +157,7 @@ class TestMain(unittest.TestCase):
                     continue
                 try:
                     resp = requests.get('http://localhost:8080')
-                except Exception as e:
+                except Exception:
                     raise Exception(cmd)
                 status = resp.status_code
                 self.assertEqual(status, 200, backend)
