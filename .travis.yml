@@ -1,10 +1,14 @@
 language: python
 sudo: false
-env:
-    - TOX_ENV=py27
-    - TOX_ENV=py35
-    - TOX_ENV=flake8
-    - TOX_ENV=docs
+matrix:
+    - python: 2.7
+      env: TOX_ENV=py27
+    - python: 3.5
+      env: TOX_ENV=py35
+    - python: 3.5
+      env: TOX_ENV=flake8
+    - python: 3.5
+      env: TOX_ENV=docs
 addons:
     apt:
         packages:
