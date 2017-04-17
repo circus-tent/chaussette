@@ -29,8 +29,9 @@ def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
         'backlog': backlog,
         'address_family': address_family,
         'socket_type': socket_type,
-        'disable_monkeypatch' : disable_monkeypatch
+        'disable_monkeypatch': disable_monkeypatch
     }
+
     if spawn is not None:
         server_class_kwargs['spawn'] = spawn
     if graceful_timeout is not None:
