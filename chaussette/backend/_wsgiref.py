@@ -24,7 +24,7 @@ class ChaussetteServer(WSGIServer):
 
     def __init__(self, server_address, app, bind_and_activate=True,
                  backlog=2048, socket_type=socket.SOCK_STREAM,
-                 address_family=socket.AF_INET):
+                 address_family=socket.AF_INET, **kw):
         self.address_family = address_family
         self.socket_type = socket_type
         socketserver.BaseServer.__init__(self, server_address,
