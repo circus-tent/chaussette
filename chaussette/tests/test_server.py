@@ -114,14 +114,6 @@ class TestServer(unittest.TestCase):
         ]))
         self.assertEqual(server, 'backend_impl')
 
-    def test_make_server_spawn_fail(self):
-        """
-        Check the spawn option for a backend that does not support it
-        :return:
-        """
-        self.assertRaises(TypeError, chaussette.server.make_server, 'app',
-                          'host', 'port', spawn=5)
-
 
 class TestMain(unittest.TestCase):
     """
