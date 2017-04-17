@@ -17,7 +17,7 @@ addons:
 install:
   - python setup.py develop
   - pip install tox
-script: tox -e $TOX_ENV
+script: tox
 after_success:
   - pip install coveralls
   - coveralls
