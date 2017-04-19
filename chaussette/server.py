@@ -157,6 +157,10 @@ def main():
                         help="log output")
     args = parser.parse_args()
 
+    if args.python_path is not None:
+        for path in args.python_path.split(os.pathsep):
+            sys.path.append(path)
+
     if is_gevent_backend(args.backend) and not args.no_monkey:
         from gevent import monkey
         monkey.noisy = False
