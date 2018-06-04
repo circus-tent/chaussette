@@ -18,9 +18,8 @@ class Server(WSGIServer):
 
         self._chaussette_family_and_type = address_family, socket_type
 
-        # Waitress can't handle these kwargs
-        for kwarg_key in ['address_family', 'disable_monkeypatch', 'socket_type']:
-            kw.pop(kwarg_key)
+        # Waitress can't handle this kwarg
+        kw.pop('disable_monkeypatch')
 
         # check if waitress has IPv6 support (waitress >= 1.0)
         if hasattr(waitress.compat, 'HAS_IPV6'):
