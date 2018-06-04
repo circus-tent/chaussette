@@ -12,7 +12,7 @@ from chaussette.backend import get, backends, is_gevent_backend
 def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
                 spawn=None, logger=None, address_family=socket.AF_INET,
                 socket_type=socket.SOCK_STREAM, graceful_timeout=None,
-                disable_monkeypatch=False):
+                disable_monkeypatch=False, webserver_kwargs=None):
 
     logger = logger or chaussette_logger
     logger.info('Application is %r' % app)
@@ -29,9 +29,10 @@ def make_server(app, host=None, port=None, backend='wsgiref', backlog=2048,
         'backlog': backlog,
         'address_family': address_family,
         'socket_type': socket_type,
-        'disable_monkeypatch': disable_monkeypatch
+        'disable_monkeypatch': disable_monkeypatch,
     }
 
+    server_class_kwargs.update(webserver_kwargs or {})
     if spawn is not None:
         server_class_kwargs['spawn'] = spawn
     if graceful_timeout is not None:
@@ -207,6 +208,12 @@ def main():
 
     def inner():
         try:
+            # Assumes that all arguments are kwargs - refactor for args as required
+            webserver_kwargs = {}
+            for argument in args.arguments:
+                key, value = argument.split('=')
+                webserver_kwargs[key] = value
+
             httpd = make_server(app, host=host, port=args.port,
                                 backend=args.backend, backlog=args.backlog,
                                 spawn=args.spawn,
@@ -214,7 +221,8 @@ def main():
                                 logger=logger,
                                 address_family=address_family,
                                 socket_type=_SOCKET_TYPE[args.socket_type],
-                                disable_monkeypatch=args.no_monkey)
+                                disable_monkeypatch=args.no_monkey,
+                                webserver_kwargs=webserver_kwargs)
             try:
                 httpd.serve_forever()
             except KeyboardInterrupt:
