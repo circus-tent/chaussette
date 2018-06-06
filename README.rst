@@ -35,7 +35,7 @@ Running:
 
    chaussette
 
-starts a very simple HTTP sample server on port 8080.  
+starts a very simple HTTP sample server on port 8080.
 
 
 Starting a WSGI application using chaussette is simply a matter of calling:
@@ -71,7 +71,7 @@ In these examples, we start a standalone WSGI server, but the spirit of
 chaussette is to be managed by Circus_, as described
 https://chaussette.readthedocs.io/en/latest/#using-chaussette-in-circus
 
-   
+
 Links
 -----
 
@@ -86,6 +86,16 @@ Links
 
 Changelog
 ---------
+
+Siyavula Fork - 2018-06-04
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Chaussette has NO support for actually transferring the arguments captured (under `arguments`) to
+the webserver even though it appears exactly what it is intended for. This fork has been
+specifically tested with Waitress but the change should work for other backends as well. This fork
+assumes that those arguments (while still optional) are keyword arguments and then passes them in
+when creating the server.
+
 
 1.3.0 - 2015-06-01
 ~~~~~~~~~~~~~~~~~~
