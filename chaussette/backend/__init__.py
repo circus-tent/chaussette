@@ -36,18 +36,18 @@ try:
 except ImportError:
     pass
 
+try:
+    from chaussette.backend import _gevent
+    _backends['gevent'] = _gevent.Server
+
+    from chaussette.backend import _fastgevent
+    _backends['fastgevent'] = _fastgevent.Server
+except ImportError:
+    pass
+
 PY3 = sys.version_info[0] == 3
 
 if not PY3:
-    try:
-        from chaussette.backend import _gevent
-        _backends['gevent'] = _gevent.Server
-
-        from chaussette.backend import _fastgevent
-        _backends['fastgevent'] = _fastgevent.Server
-    except ImportError:
-        pass
-
     try:
         from chaussette.backend import _geventwebsocket
         _backends['geventwebsocket'] = _geventwebsocket.Server

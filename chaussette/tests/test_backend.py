@@ -13,7 +13,7 @@ PY2 = ['bjoern', 'eventlet', 'fastgevent', 'gevent',
        'socketio', 'tornado', 'waitress',
        'wsgiref']
 PYPY = ['tornado', 'waitress', 'wsgiref']
-PY3 = ['eventlet', 'meinheld', 'tornado', 'waitress', 'wsgiref']
+PY3 = ['eventlet', 'gevent', 'meinheld', 'tornado', 'waitress', 'wsgiref']
 
 
 class TestBackend(unittest.TestCase):
