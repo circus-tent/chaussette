@@ -13,6 +13,7 @@ class Server(WSGIServer):
         host, port = listener
         if host.startswith('fd://'):
             self._fd = int(host.split('://')[1])
+            host = '0.0.0.0'
         else:
             self._fd = None
 
