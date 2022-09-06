@@ -4,6 +4,12 @@ Chaussette WSGI Server
 .. image:: images/chaussette.png
    :align: right
 
+**Chaussette-backport** is a fork of chaussette as chaussette is not working
+properly with current waitress & more. See `https://github.com/circus-tent/chaussette/pull/89`
+
+**Chaussette is a hard work, the idea of backporting the project is juste to be able to install
+fixed version of the application. Feel free to contact us if you think we should remove this backport
+from Pypi.
 
 **Chaussette** is a WSGI server you can use to run your Python WSGI
 applications.
@@ -256,4 +262,4 @@ Useful links
 - Repository : https://github.com/circus-tent/chaussette
 - Documentation : https://chaussette.readthedocs.io
 - Continuous Integration: https://travis-ci.org/circus-tent/chaussette
-    
+

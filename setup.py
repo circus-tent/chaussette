@@ -38,7 +38,7 @@ if sys.version_info[0] == 2:
         tests_require += ['gevent', 'gevent-websocket', 'eventlet',
                           'gevent-socketio', 'bjoern']
 
-setup(name='chaussette',
+setup(name='chaussette-backport',
       version=__version__,
       url='https://chaussette.readthedocs.io',
       packages=find_packages(exclude=['examples', 'examples.simple_chat']),
